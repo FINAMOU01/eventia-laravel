@@ -2,12 +2,14 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
+        "build": "npm run images && vite build",
+        "images": "node scripts/optimize-images.mjs",
         "dev": "vite"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.3.3",
         "laravel-vite-plugin": "^1.2.0",
+        "sharp": "^0.35.5",
         "tailwindcss": "^4.3.3",
         "vite": "^6.0.11"
     },

@@ -1,0 +1,122 @@
+{
+  "/media/brand/logo.png": {
+    "width": 2000,
+    "height": 2000,
+    "folder": "/media-optimized/brand/logo"
+  },
+  "/media/equipe/equipe1.jpg": {
+    "width": 2048,
+    "height": 1228,
+    "folder": "/media-optimized/equipe/equipe1"
+  },
+  "/media/equipe/equipe2-cutout.png": {
+    "width": 1496,
+    "height": 828,
+    "folder": "/media-optimized/equipe/equipe2-cutout"
+  },
+  "/media/equipe/equipe2.png": {
+    "width": 2000,
+    "height": 2000,
+    "folder": "/media-optimized/equipe/equipe2"
+  },
+  "/media/equipe/noura.jpg": {
+    "width": 696,
+    "height": 569,
+    "folder": "/media-optimized/equipe/noura"
+  },
+  "/media/equipe/NouraPDG.PNG": {
+    "width": 1320,
+    "height": 1748,
+    "folder": "/media-optimized/equipe/NouraPDG"
+  },
+  "/media/expertise/acceuil&presentation.jpg": {
+    "width": 1365,
+    "height": 768,
+    "folder": "/media-optimized/expertise/acceuil&presentation"
+  },
+  "/media/expertise/decoration.jpg": {
+    "width": 1376,
+    "height": 768,
+    "folder": "/media-optimized/expertise/decoration"
+  },
+  "/media/expertise/gestion de l'image.jpg": {
+    "width": 1264,
+    "height": 843,
+    "folder": "/media-optimized/expertise/gestion de l'image"
+  },
+  "/media/expertise/lancement de produit.jpg": {
+    "width": 1195,
+    "height": 896,
+    "folder": "/media-optimized/expertise/lancement de produit"
+  },
+  "/media/expertise/organisation.jpg": {
+    "width": 1365,
+    "height": 768,
+    "folder": "/media-optimized/expertise/organisation"
+  },
+  "/media/expertise/orientation&accompagne.jpg": {
+    "width": 685,
+    "height": 768,
+    "folder": "/media-optimized/expertise/orientation&accompagne"
+  },
+  "/media/expertise/personnel evenementiel sur mesure.jpg": {
+    "width": 1376,
+    "height": 768,
+    "folder": "/media-optimized/expertise/personnel evenementiel sur mesure"
+  },
+  "/media/expertise/restoration.jpg": {
+    "width": 1264,
+    "height": 843,
+    "folder": "/media-optimized/expertise/restoration"
+  },
+  "/media/expertise/wedding planning.jpg": {
+    "width": 1376,
+    "height": 768,
+    "folder": "/media-optimized/expertise/wedding planning"
+  },
+  "/media/hero/hero.jpg": {
+    "width": 810,
+    "height": 1080,
+    "folder": "/media-optimized/hero/hero"
+  },
+  "/media/hero/spot-poster.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "folder": "/media-optimized/hero/spot-poster"
+  },
+  "/media/realisations/comica/COMICA_partenariat.jpg": {
+    "width": 1638,
+    "height": 2048,
+    "folder": "/media-optimized/realisations/comica/COMICA_partenariat"
+  },
+  "/media/realisations/miss-cameroun-2026/mis cameroun4.PNG": {
+    "width": 5712,
+    "height": 3392,
+    "folder": "/media-optimized/realisations/miss-cameroun-2026/mis cameroun4"
+  },
+  "/media/realisations/miss-cameroun-2026/miss cameroun2.jpg": {
+    "width": 1080,
+    "height": 810,
+    "folder": "/media-optimized/realisations/miss-cameroun-2026/miss cameroun2"
+  },
+  "/media/realisations/miss-cameroun-2026/miss cameroun3.png": {
+    "width": 2560,
+    "height": 1706,
+    "folder": "/media-optimized/realisations/miss-cameroun-2026/miss cameroun3"
+  },
+  "/media/realisations/miss-cameroun-2026/miss cameroun5.jpeg": {
+    "width": 5649,
+    "height": 3765,
+    "folder": "/media-optimized/realisations/miss-cameroun-2026/miss cameroun5"
+  },
+  "/media/realisations/miss-cameroun-2026/misscameroun1.jpg": {
+    "width": 1080,
+    "height": 810,
+    "folder": "/media-optimized/realisations/miss-cameroun-2026/misscameroun1"
+  },
+  "/media/recrutement/recrutement.png": {
+    "width": 2000,
+    "height": 2000,
+    "folder": "/media-optimized/recrutement/recrutement"
+  }
+}

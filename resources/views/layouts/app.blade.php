@@ -14,7 +14,8 @@
     {{-- Static string (no user input), run before paint so English visitors never see the French page first. --}}
     <script>{!! I18n::browserLanguageRedirect() !!}</script>
   @endif
-  <link rel="preload" as="image" href="/media/brand/logo.png" fetchpriority="high">
+  @php $logo = Media::responsive('/media/brand/logo.png', null, 2000); @endphp
+  <link rel="preload" as="image" imagesrcset="{{ $logo['srcset'] }}" fetchpriority="high">
   @stack('preload')
   <title>{{ $meta['title'] }}</title>
   <meta name="description" content="{{ $meta['description'] }}">

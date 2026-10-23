@@ -306,4 +306,55 @@ final class Media
     {
         return implode('/', array_map('rawurlencode', explode('/', $path)));
     }
+
+    /** next.config defaults: images.imageSizes + images.deviceSizes. */
+    private const ALL_SIZES = [32, 48, 64, 96, 128, 256, 384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840];
+
+    private const DEVICE_SIZES = [640, 750, 828, 1080, 1200, 1920, 2048, 3840];
+
+    private static ?array $optimized = null;
+
+    /**
+     * Responsive attributes of an image, as next/image computes them (getWidths in next/dist/shared/lib/get-img-props).
+     * Uses the WebP copies built by scripts/optimize-images.mjs; falls back to the original file when none exist.
+     *
+     * @return array{src: string, srcset: ?string}
+     */
+    public static function responsive(string $src, ?string $sizes = null, ?int $width = null): array
+    {
+        self::$optimized ??= is_file($manifest = public_path('media-optimized/manifest.json'))
+            ? json_decode(file_get_contents($manifest), true)
+            : [];
+        $entry = self::$optimized[$src] ?? null;
+        if (! $entry) {
+            return ['src' => self::url($src), 'srcset' => null];
+        }
+
+        if ($sizes !== null) {
+            preg_match_all('/(^|\s)(1?\d?\d)vw/', $sizes, $matches);
+            $percents = array_map('intval', $matches[2]);
+            $widths = $percents
+                ? array_values(array_filter(self::ALL_SIZES, fn ($size) => $size >= self::DEVICE_SIZES[0] * min($percents) * 0.01))
+                : self::ALL_SIZES;
+            $kind = 'w';
+        } elseif ($width === null) {
+            $widths = self::DEVICE_SIZES;
+            $kind = 'w';
+        } else {
+            $last = self::ALL_SIZES[count(self::ALL_SIZES) - 1];
+            $find = fn (int $w) => current(array_filter(self::ALL_SIZES, fn ($size) => $size >= $w)) ?: $last;
+            $widths = array_values(array_unique([$find($width), $find($width * 2)]));
+            $kind = 'x';
+        }
+
+        // The optimizer never upscales: widths past the original are served at the original size.
+        $file = fn (int $w) => self::url($entry['folder'].'/'.min($w, $entry['width']).'.webp');
+        $candidates = array_map(
+            fn (int $w, int $i) => $file($w).' '.($kind === 'w' ? "{$w}w" : ($i + 1).'x'),
+            $widths,
+            array_keys($widths),
+        );
+
+        return ['src' => $file($widths[count($widths) - 1]), 'srcset' => implode(', ', $candidates)];
+    }
 }
