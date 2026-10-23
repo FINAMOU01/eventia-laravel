@@ -1,7 +1,7 @@
 @import "@fontsource-variable/playfair-display/wght.css";
 @import "@fontsource-variable/playfair-display/wght-italic.css";
 @import "@fontsource-variable/montserrat/wght.css";
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 
 /* Blade views, components and the PHP data layer hold the utility classes. */
 @source "../views";

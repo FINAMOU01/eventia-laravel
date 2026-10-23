@@ -1,66 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# EVENTIA BY N.J — site Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Migration fidèle du site EVENTIA BY N.J (Next.js) vers **Laravel 12 / PHP 8.2**. Les contenus, médias, styles, animations, URLs et métadonnées sont ceux du site Next.js d'origine ; seul le moteur change.
 
-## About Laravel
+## Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Rôle | Next.js (source) | Laravel (ce dépôt) |
+| --- | --- | --- |
+| Rendu | React Server Components | Blade (composants anonymes) |
+| Styles | Tailwind CSS v4 + `app/globals.css` | Tailwind CSS v4 + `resources/css/app.css` (même fichier) |
+| Animations | Framer Motion | [Motion](https://motion.dev) (même équipe) |
+| Interactions | React (hooks) | Alpine.js |
+| Polices | `next/font` (Playfair Display, Montserrat) | Fontsource, auto-hébergées, mêmes polices de secours |
+| Données | `lib/*.ts` | `app/Support/*.php` |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Arborescence utile
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```
+app/Support/            Données et helpers (ports de lib/*.ts)
+  Content.php           Contenus FR / EN (textes validés par le client)
+  Site.php              Coordonnées, navigation, liens WhatsApp / mailto
+  Media.php             Manifeste des médias (images, alt, cadrage)
+  Metadata.php          Titres, descriptions, canonical, hreflang
+  I18n.php              URLs FR (racine) / EN (/en), redirection selon la langue
+resources/views/
+  layouts/app.blade.php En-tête <head>, header, footer, bouton WhatsApp
+  pages/                Une vue par page
+  components/site/      Sections du site (hero, expertise, réalisations…)
+  components/ui/        Briques (bouton, lien, reveal, média, vidéo…)
+  errors/404.blade.php  Page 404 identique à celle de Next.js
+resources/js/modules/   Comportements (header, carrousels, vidéos, formulaire, animations)
+public/media/           Médias d'origine, copiés à l'identique
+public/build/           CSS / JS compilés (versionnés : le serveur n'a pas Node)
+```
 
-## Learning Laravel
+## Développement local
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Prérequis : PHP 8.2+ (extensions `ctype`, `dom`, `fileinfo`, `filter`, `hash`, `iconv`, `json`, `libxml`, `mbstring`, `openssl`, `pcre`, `session`, `tokenizer`), Composer 2, Node 20+.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+npm install
+npm run build        # ou "npm run dev" pendant le développement
+php artisan serve    # http://localhost:8000
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Tests :
 
-## Laravel Sponsors
+```bash
+php artisan test
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+> Après toute modification de CSS, de JS ou de classes Tailwind dans les vues, relancez `npm run build` et versionnez `public/build/`.
 
-### Premium Partners
+## URLs
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Identiques au site Next.js : français à la racine, anglais sous `/en`.
 
-## Contributing
+`/`, `/expertises`, `/realisations`, `/equipe`, `/recrutement`, `/contact`, `/mentions-legales` et leurs équivalents `/en/...`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Déploiement sur cPanel
 
-## Code of Conduct
+Le site n'utilise ni base de données ni Node.js côté serveur : il suffit de PHP 8.2 (déjà actif sur l'hébergement).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. **Envoyer le code** dans un dossier hors de `public_html`, par exemple `/home/eventianjadmin/eventia-laravel` (Git Version Control de cPanel ou gestionnaire de fichiers).
+2. **Dépendances PHP** : `composer install --no-dev --optimize-autoloader`.
+   - Si Composer n'est pas disponible sur l'hébergement, exécutez cette commande en local et envoyez aussi le dossier `vendor/`.
+3. **Fichier `.env`** : copier `.env.example` en `.env`, puis régler :
+   ```
+   APP_ENV=production
+   APP_DEBUG=false
+   APP_URL=https://eventianj.com
+   APP_KEY=        # php artisan key:generate (ou générer en local et coller la valeur)
+   ```
+   Le fichier `.env` ne doit jamais être versionné ni placé dans un dossier public.
+4. **Racine du site** : faire pointer le domaine vers le dossier `public` de Laravel.
+   - cPanel → Websites → eventianj.com → Settings → **Website Folder** : `/home/eventianjadmin/eventia-laravel/public`.
+   - Ne jamais exposer la racine du projet : `.env`, `vendor/` et `app/` doivent rester hors du dossier public.
+5. **Permissions** : `storage/` et `bootstrap/cache/` doivent être accessibles en écriture par PHP (755 / 775 selon l'hébergement).
+6. **Optimisation** (après chaque déploiement) :
+   ```bash
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+   ```
+7. **Vérifier** les 14 URLs, le changement de langue FR / EN et une URL inconnue (page 404).
 
-## Security Vulnerabilities
+Le fichier `public/.htaccess` fourni par Laravel gère la réécriture d'URL (Apache `mod_rewrite`).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Points connus
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Formulaire de devis** : comme sur le site Next.js, il n'y a pas d'envoi côté serveur. Le formulaire ouvre la messagerie du visiteur avec la demande pré-remplie vers `contact@eventianj.com` (`resources/js/modules/quote-form.js`, méthode `send`).
+- **Images** : les fichiers originaux sont servis tels quels. Next.js les redimensionnait automatiquement (`next/image`) ; certaines photos pèsent plusieurs dizaines de Mo (`mis cameroun4.PNG`, 27 Mo). Une optimisation (versions redimensionnées en plus des originaux) reste à décider.
+- **Médias manquants** (déjà absents du site Next.js, affichés comme « Média à remplacer ») : `public/media/realisations/littoral-sud-ouest-2026/main.jpg` et `detail-1.jpg`.
