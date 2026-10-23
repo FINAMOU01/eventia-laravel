@@ -1,12 +1,327 @@
-@import 'tailwindcss';
+@import "@fontsource-variable/playfair-display/wght.css";
+@import "@fontsource-variable/playfair-display/wght-italic.css";
+@import "@fontsource-variable/montserrat/wght.css";
+@import "tailwindcss";
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source "../**/*.blade.php";
-@source "../**/*.js";
-@source "../**/*.vue";
+/* Blade views, components and the PHP data layer hold the utility classes. */
+@source "../views";
+@source "../js";
+@source "../../app";
 
+/* ---------------------------------------------------------------------------
+   0. Fonts (self-hosted, same families and metric fallbacks as next/font)
+   --------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Playfair Display Fallback";
+  src: local("Times New Roman");
+  ascent-override: 97.25%;
+  descent-override: 22.56%;
+  line-gap-override: 0%;
+  size-adjust: 111.26%;
+}
+
+@font-face {
+  font-family: "Montserrat Fallback";
+  src: local("Arial");
+  ascent-override: 85.79%;
+  descent-override: 22.25%;
+  line-gap-override: 0%;
+  size-adjust: 112.83%;
+}
+
+:root {
+  --font-playfair: "Playfair Display Variable", "Playfair Display Fallback";
+  --font-montserrat: "Montserrat Variable", "Montserrat Fallback";
+}
+
+[x-cloak] {
+  display: none !important;
+}
+/* ---------------------------------------------------------------------------
+   1. Brand palette (EVENTIA BY N.J)
+   --------------------------------------------------------------------------- */
+:root {
+  --eventia-primary: #014a97;
+  --eventia-royal: #043aa4;
+  --eventia-deep: #00306a;
+  --eventia-ink: #0a1020;
+  --eventia-muted: #5b616b;
+  --eventia-surface: #f6f9fe;
+  --eventia-surface-2: #ebf2f8;
+  --eventia-border: #dce5ef;
+  --eventia-input: #d0dae3;
+  --eventia-divider: #e7ebf4;
+  --eventia-sky: #7bbff0;
+  --eventia-white: #ffffff;
+
+  /* Layout */
+  --gutter: 1.25rem;
+  --grid-columns: 4;
+  --grid-gap: 1rem;
+  --header-height: 4.5rem;
+
+  /* Motion (mirrored in lib/motion.ts) */
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 700ms;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --gutter: 2.5rem;
+    --grid-columns: 8;
+    --grid-gap: 1.25rem;
+  }
+}
+
+@media (width >= 64rem) {
+  :root {
+    --grid-columns: 12;
+    --grid-gap: 1.5rem;
+    --header-height: 5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   2. Tones: semantic colors that sections switch as a whole
+   --------------------------------------------------------------------------- */
+:root,
+.tone-light,
+.tone-surface {
+  --tone-canvas: var(--eventia-white);
+  --tone-fg: var(--eventia-ink);
+  --tone-fg-muted: var(--eventia-muted);
+  --tone-accent: var(--eventia-primary);
+  --tone-line: var(--eventia-border);
+  --tone-cta: var(--eventia-primary);
+  --tone-cta-fg: var(--eventia-white);
+  --tone-cta-hover: var(--eventia-deep);
+  --tone-focus: var(--eventia-royal);
+}
+
+.tone-surface {
+  --tone-canvas: var(--eventia-surface);
+}
+
+.tone-deep {
+  --tone-canvas: var(--eventia-deep);
+  --tone-fg: var(--eventia-white);
+  --tone-fg-muted: color-mix(in srgb, var(--eventia-white) 80%, transparent);
+  --tone-accent: var(--eventia-sky);
+  --tone-line: color-mix(in srgb, var(--eventia-white) 20%, transparent);
+  --tone-cta: var(--eventia-white);
+  --tone-cta-fg: var(--eventia-deep);
+  --tone-cta-hover: var(--eventia-surface-2);
+  --tone-focus: var(--eventia-sky);
+}
+
+/* ---------------------------------------------------------------------------
+   3. Tailwind theme
+   --------------------------------------------------------------------------- */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+  --color-*: initial;
+
+  /* Typography scale: editorial, deliberately restrained */
+  --text-display: clamp(2.5rem, 1.75rem + 2.6vw, 4.25rem);
+  --text-display--line-height: 1.08;
+  --text-display--letter-spacing: -0.01em;
+  --text-h2: clamp(2rem, 1.6rem + 1.5vw, 3rem);
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.005em;
+  --text-h3: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
+  --text-h3--line-height: 1.25;
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-lead--line-height: 1.65;
+  --text-body: 1rem;
+  --text-body--line-height: 1.7;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.55;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.18em;
+  --text-button: 0.8125rem;
+  --text-button--line-height: 1;
+  --text-button--letter-spacing: 0.08em;
+
+  /* Radii */
+  --radius-control: 9999px;
+  --radius-media: 0.25rem;
+  --radius-card: 0.5rem;
+
+  /* Shadows */
+  --shadow-soft:
+    0 1px 2px color-mix(in srgb, var(--eventia-ink) 6%, transparent),
+    0 10px 30px -18px color-mix(in srgb, var(--eventia-deep) 35%, transparent);
+  --shadow-lift:
+    0 2px 4px color-mix(in srgb, var(--eventia-ink) 6%, transparent),
+    0 22px 44px -22px color-mix(in srgb, var(--eventia-deep) 45%, transparent);
+
+  /* Transitions */
+  --ease-eventia: cubic-bezier(0.22, 1, 0.36, 1);
+  --default-transition-duration: 250ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-cta-pulse: cta-pulse 2.4s var(--ease-eventia) infinite;
+
+  @keyframes cta-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--pulse-color, var(--tone-cta)) 55%, transparent);
+    }
+    15% {
+      transform: scale(1.07);
+    }
+    30% {
+      transform: scale(1);
+    }
+    60% {
+      box-shadow: 0 0 0 12px color-mix(in srgb, var(--pulse-color, var(--tone-cta)) 0%, transparent);
+    }
+  }
+
+  --animate-scroll-cue: scroll-cue 2.2s var(--ease-eventia) infinite;
+
+  @keyframes scroll-cue {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(200%);
+    }
+  }
+
+  /* Vertical rhythm */
+  --spacing-section: clamp(2rem, 1.25rem + 1.5vw, 3rem);
+  --spacing-section-sm: clamp(1.5rem, 1rem + 1vw, 2rem);
+
+  /* Widths */
+  --container-site: 78rem;
+  --container-text: 38rem;
+}
+
+@theme inline {
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-montserrat), system-ui, sans-serif;
+
+  --color-primary: var(--eventia-primary);
+  --color-royal: var(--eventia-royal);
+  --color-deep: var(--eventia-deep);
+  --color-ink: var(--eventia-ink);
+  --color-muted: var(--eventia-muted);
+  --color-surface: var(--eventia-surface);
+  --color-surface-2: var(--eventia-surface-2);
+  --color-border: var(--eventia-border);
+  --color-input: var(--eventia-input);
+  --color-divider: var(--eventia-divider);
+  --color-sky: var(--eventia-sky);
+  --color-white: var(--eventia-white);
+  --color-whatsapp: #25d366;
+
+  --color-canvas: var(--tone-canvas);
+  --color-fg: var(--tone-fg);
+  --color-fg-muted: var(--tone-fg-muted);
+  --color-accent: var(--tone-accent);
+  --color-line: var(--tone-line);
+  --color-cta: var(--tone-cta);
+  --color-cta-fg: var(--tone-cta-fg);
+  --color-cta-hover: var(--tone-cta-hover);
+
+  --spacing-gutter: var(--gutter);
+}
+
+/* ---------------------------------------------------------------------------
+   4. Base
+   --------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-padding-top: var(--header-height);
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--tone-canvas);
+    color: var(--tone-fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--eventia-sky);
+    color: var(--eventia-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--tone-focus);
+    outline-offset: 3px;
+  }
+
+  /* Programmatic focus targets (skip link, in-page navigation). */
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   5. Components & utilities
+   --------------------------------------------------------------------------- */
+@layer components {
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    padding-block: 0.125rem;
+    transition: background-size var(--duration-base) var(--ease-eventia);
+  }
+
+  .link-underline:hover,
+  .group\/button:hover .link-underline,
+  .group\/button:focus-visible .link-underline {
+    background-size: 100% 1px;
+  }
+}
+
+@utility site-container {
+  width: 100%;
+  max-width: calc(var(--container-site) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility site-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
