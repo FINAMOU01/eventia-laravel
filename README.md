@@ -30,7 +30,9 @@ resources/views/
   errors/404.blade.php  Page 404 identique à celle de Next.js
 resources/js/modules/   Comportements (header, carrousels, vidéos, formulaire, animations)
 public/media/           Médias d'origine, copiés à l'identique
+public/media-optimized/ Copies WebP redimensionnées (générées, ne pas modifier à la main)
 public/build/           CSS / JS compilés (versionnés : le serveur n'a pas Node)
+scripts/                optimize-images.mjs (équivalent de l'optimiseur next/image)
 ```
 
 ## Développement local
@@ -92,5 +94,5 @@ Le fichier `public/.htaccess` fourni par Laravel gère la réécriture d'URL (Ap
 ## Points connus
 
 - **Formulaire de devis** : comme sur le site Next.js, il n'y a pas d'envoi côté serveur. Le formulaire ouvre la messagerie du visiteur avec la demande pré-remplie vers `contact@eventianj.com` (`resources/js/modules/quote-form.js`, méthode `send`).
-- **Images** : les fichiers originaux sont servis tels quels. Next.js les redimensionnait automatiquement (`next/image`) ; certaines photos pèsent plusieurs dizaines de Mo (`mis cameroun4.PNG`, 27 Mo). Une optimisation (versions redimensionnées en plus des originaux) reste à décider.
+- **Images** : comme `next/image`, le site sert des copies WebP redimensionnées (qualité 75, mêmes largeurs que Next.js) via `srcset`, générées dans `public/media-optimized/` par `npm run images` (lancé aussi par `npm run build`). Les originaux de `public/media/` ne sont jamais modifiés. Après l'ajout ou le remplacement d'une photo, relancez `npm run build` et versionnez `public/media-optimized/`.
 - **Médias manquants** (déjà absents du site Next.js, affichés comme « Média à remplacer ») : `public/media/realisations/littoral-sud-ouest-2026/main.jpg` et `detail-1.jpg`.
