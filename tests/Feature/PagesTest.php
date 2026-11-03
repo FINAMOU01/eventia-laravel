@@ -88,7 +88,15 @@ class PagesTest extends TestCase
                 'Des équipes d’accueil, de protocole et d’activation pour offrir une expérience professionnelle à vos publics.',
                 'Conception et coordination d’événements professionnels, institutionnels, culturels et privés.',
             ])
-            ->assertDontSee('Descriptions officielles des trois pôles');
+            ->assertDontSee('Descriptions officielles des trois pôles')
+            ->assertSeeInOrder([
+                'Pourquoi EVENTIA',
+                'Trois expertises complémentaires, mobilisables séparément ou ensemble.',
+                'Des solutions adaptées aux objectifs et au budget du client.',
+                'Une organisation structurée, de la préparation à l’exécution.',
+                'Une attention portée à l’image, au service et aux détails.',
+            ])
+            ->assertDontSee('Les quatre engagements d’EVENTIA');
         $this->get('/')->assertSee('EVENTIA SARL')->assertSee('Pourquoi EVENTIA ?');
         $this->get('/expertises/image-personal-branding')->assertSee('Faites de votre image une force.')->assertSee('Votre image. Votre influence. Votre empreinte.');
         $this->get('/expertises/hotesses')->assertSee('Le premier contact donne le ton.')->assertSee('L’élégance de l’accueil. La puissance de l’image.')->assertSee('Miss Cameroun 2026');

@@ -60,8 +60,12 @@ final class Content
                 'text' => 'Image, accueil et événementiel : trois expertises complémentaires pour valoriser votre identité, soigner l’expérience de vos publics et donner vie à vos projets.',
                 'polesEyebrow' => 'Nos expertises',
                 'whyTitle' => 'Pourquoi EVENTIA ?',
-                // Four commitments communicated by the client.
-                'why' => null,
+                'why' => [
+                    'Trois expertises complémentaires, mobilisables séparément ou ensemble.',
+                    'Des solutions adaptées aux objectifs et au budget du client.',
+                    'Une organisation structurée, de la préparation à l’exécution.',
+                    'Une attention portée à l’image, au service et aux détails.',
+                ],
             ],
             'poles' => [
                 [
@@ -185,7 +189,12 @@ final class Content
                 'text' => 'Image, hospitality and events: three complementary areas of expertise to enhance your identity, care for your audiences’ experience and bring your projects to life.',
                 'polesEyebrow' => 'Our expertise',
                 'whyTitle' => 'Why EVENTIA?',
-                'why' => null,
+                'why' => [
+                    'Three complementary areas of expertise, available separately or together.',
+                    'Solutions tailored to the client’s objectives and budget.',
+                    'A structured organisation, from preparation to execution.',
+                    'Close attention to image, service and detail.',
+                ],
             ],
             'poles' => [
                 [

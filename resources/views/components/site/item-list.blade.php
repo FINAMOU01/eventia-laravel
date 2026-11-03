@@ -26,13 +26,18 @@
     @foreach (array_map($normalize, $items) as $index => $item)
       <x-ui.reveal-item as="li" class="group/step flex flex-col">
         <span aria-hidden="true" class="font-display text-[clamp(3.5rem,2.5rem+3vw,5.5rem)] leading-none text-accent/35 transition-colors duration-500 group-hover/step:text-accent">{{ Web::pad($index + 1) }}</span>
-        <span aria-hidden="true" class="mt-6 flex items-center gap-3 text-accent">
+        <span aria-hidden="true" class="mt-6 flex h-4 items-center gap-3 text-accent">
           <span class="size-2 shrink-0 rounded-full bg-accent"></span>
           <x-ui.reveal-item as="span" variant="draw" class="block h-px flex-1 origin-left bg-accent/40"></x-ui.reveal-item>
           @if ($index !== count($items) - 1)<x-icon name="arrow-right" class="hidden size-4 lg:block" />@endif
         </span>
-        <h3 class="mt-6 font-sans text-button tracking-[0.18em] text-fg uppercase">{{ $item['title'] }}</h3>
-        @if ($item['text'])<p class="mt-3 max-w-xs text-body text-fg-muted">{{ $item['text'] }}</p>@endif
+        @if ($item['text'])
+          <h3 class="mt-6 font-sans text-button tracking-[0.18em] text-fg uppercase">{{ $item['title'] }}</h3>
+          <p class="mt-3 max-w-xs text-body text-fg-muted">{{ $item['text'] }}</p>
+        @else
+          {{-- Plain sentence (e.g. commitments): kept readable instead of small caps. --}}
+          <p class="mt-6 max-w-xs text-lead text-fg">{{ $item['title'] }}</p>
+        @endif
       </x-ui.reveal-item>
     @endforeach
   </x-ui.reveal-group>
