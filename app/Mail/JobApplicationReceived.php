@@ -11,10 +11,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-/** Notifies the recruitment team of a new application, with the CV attached. */
+/** Notifies the recruitment team of a new application, with the four documents attached. */
 class JobApplicationReceived extends Mailable
 {
     use Queueable, SerializesModels;
+
+    public const LABELS = [
+        'cv' => 'CV',
+        'cover_letter' => 'Lettre de motivation',
+        'photo_portrait' => 'Photo portrait récente',
+        'photo_full' => 'Photo récente en pied',
+    ];
 
     public function __construct(public JobApplication $application) {}
 
@@ -28,15 +35,19 @@ class JobApplicationReceived extends Mailable
 
     public function content(): Content
     {
-        return new Content(text: 'mail.job-application');
+        return new Content(text: 'mail.job-application', with: ['labels' => self::LABELS]);
     }
 
     public function attachments(): array
     {
-        return [
-            Attachment::fromStorageDisk('local', $this->application->cv_path)
-                ->as($this->application->cv_original_name)
-                ->withMime($this->application->cv_mime),
-        ];
+        return collect(JobApplication::DOCUMENTS)
+            ->map(function (string $key) {
+                $document = $this->application->documents[$key];
+                // Prefix with the document type so the four files are easy to tell apart in the mailbox.
+                $name = self::LABELS[$key].' - '.$document['name'];
+
+                return Attachment::fromStorageDisk('local', $document['path'])->as($name)->withMime($document['mime']);
+            })
+            ->all();
     }
 }

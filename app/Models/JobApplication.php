@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobApplication extends Model
 {
+    /** Uploaded documents, in the order requested on the recruitment page. */
+    public const DOCUMENTS = ['cv', 'cover_letter', 'photo_portrait', 'photo_full'];
+
     protected $fillable = [
-        'locale', 'name', 'phone', 'email', 'city', 'mission_type', 'experience',
-        'cv_path', 'cv_original_name', 'cv_mime', 'cv_size', 'notified_at',
+        'locale', 'name', 'phone', 'email', 'city', 'mission_type', 'experience', 'documents', 'notified_at',
     ];
 
     protected function casts(): array
     {
-        return ['notified_at' => 'datetime'];
+        return ['documents' => 'array', 'notified_at' => 'datetime'];
     }
 }

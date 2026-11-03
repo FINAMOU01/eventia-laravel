@@ -45,6 +45,9 @@ class FormsTest extends TestCase
             'mission_type' => 'Hôtesse',
             'experience' => 'Deux ans en salon.',
             'cv' => UploadedFile::fake()->create('cv.pdf', 300, 'application/pdf'),
+            'cover_letter' => UploadedFile::fake()->create('lettre.docx', 80, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
+            'photo_portrait' => UploadedFile::fake()->image('portrait.jpg', 600, 800),
+            'photo_full' => UploadedFile::fake()->image('pied.png', 600, 1200),
             ...$overrides,
         ];
     }
@@ -111,7 +114,7 @@ class FormsTest extends TestCase
             ->assertSessionHas('form_status', ['form' => 'quote', 'ok' => true, 'message' => null]);
     }
 
-    public function test_application_is_stored_privately_and_emailed_with_the_cv(): void
+    public function test_application_is_stored_privately_and_emailed_with_the_four_documents(): void
     {
         Storage::fake('local');
         Mail::fake();
@@ -119,12 +122,15 @@ class FormsTest extends TestCase
         $this->postJson('/recrutement', $this->application())->assertCreated();
 
         $application = JobApplication::sole();
-        $this->assertStringStartsWith('cv/', $application->cv_path);
-        $this->assertNotSame('cv/cv.pdf', $application->cv_path, 'The stored name must not be the visitor’s file name.');
-        Storage::disk('local')->assertExists($application->cv_path);
-        $this->assertSame('cv.pdf', $application->cv_original_name);
+        $this->assertSame(['cv', 'cover_letter', 'photo_portrait', 'photo_full'], array_keys($application->documents));
+        foreach ($application->documents as $document) {
+            $this->assertStringStartsWith('candidatures/', $document['path']);
+            $this->assertStringNotContainsString($document['name'], $document['path'], 'The stored name must not be the visitor’s file name.');
+            Storage::disk('local')->assertExists($document['path']);
+        }
+        $this->assertSame('lettre.docx', $application->documents['cover_letter']['name']);
         $this->assertNotNull($application->notified_at);
-        Mail::assertSent(JobApplicationReceived::class, fn ($mail) => $mail->hasTo('candidature@eventianj.com') && count($mail->attachments()) === 1);
+        Mail::assertSent(JobApplicationReceived::class, fn ($mail) => $mail->hasTo('candidature@eventianj.com') && count($mail->attachments()) === 4);
     }
 
     public function test_application_rejects_invalid_or_oversized_cv(): void
@@ -142,6 +148,23 @@ class FormsTest extends TestCase
         $this->assertSame(0, JobApplication::count());
     }
 
+    public function test_application_requires_the_four_documents_in_the_right_formats(): void
+    {
+        Storage::fake('local');
+        Mail::fake();
+
+        $this->postJson('/recrutement', $this->application(['cover_letter' => null, 'photo_portrait' => null, 'photo_full' => null]))
+            ->assertStatus(422)->assertJsonValidationErrors(['cover_letter', 'photo_portrait', 'photo_full']);
+        $this->postJson('/recrutement', $this->application([
+            'cover_letter' => UploadedFile::fake()->image('lettre.jpg'),
+            'photo_portrait' => UploadedFile::fake()->create('portrait.pdf', 100, 'application/pdf'),
+            'photo_full' => UploadedFile::fake()->image('pied.jpg')->size(6000),
+        ]))->assertStatus(422)->assertJsonValidationErrors(['cover_letter', 'photo_portrait', 'photo_full']);
+
+        $this->assertSame(0, JobApplication::count());
+        Storage::disk('local')->assertDirectoryEmpty('candidatures');
+    }
+
     public function test_application_is_not_reported_as_sent_when_the_email_fails(): void
     {
         Storage::fake('local');
@@ -152,10 +175,11 @@ class FormsTest extends TestCase
         $this->assertNull(JobApplication::sole()->notified_at);
     }
 
-    public function test_cv_files_are_never_publicly_reachable(): void
+    public function test_documents_are_never_publicly_reachable(): void
     {
-        $this->assertFalse(str_starts_with(Storage::disk('local')->path('cv'), public_path()));
-        $this->get('/storage/app/private/cv/cv.pdf')->assertNotFound();
+        $this->assertFalse(str_starts_with(Storage::disk('local')->path('candidatures'), public_path()));
+        $this->get('/storage/app/private/candidatures/cv.pdf')->assertNotFound();
+        $this->get('/storage/candidatures/cv.pdf')->assertNotFound();
     }
 
     public function test_forms_are_rate_limited(): void

@@ -170,7 +170,7 @@ final class Content
             'privacy' => [
                 'validated' => false,
                 'quote' => 'Les informations transmises via ce formulaire sont utilisées uniquement par EVENTIA SARL pour étudier votre demande et vous recontacter. Elles ne sont ni vendues ni transmises à des tiers. Pour consulter, modifier ou supprimer vos données, écrivez à contact@eventianj.com.',
-                'application' => 'Les informations et le CV transmis via ce formulaire sont utilisés uniquement par EVENTIA SARL pour étudier votre candidature et vous recontacter. Ils ne sont ni vendus ni transmis à des tiers. Pour consulter, modifier ou supprimer vos données, écrivez à candidature@eventianj.com.',
+                'application' => 'Les informations et les documents transmis via ce formulaire sont utilisés uniquement par EVENTIA SARL pour étudier votre candidature et vous recontacter. Ils ne sont ni vendus ni transmis à des tiers. Pour consulter, modifier ou supprimer vos données, écrivez à candidature@eventianj.com.',
             ],
         ];
     }
@@ -285,7 +285,7 @@ final class Content
             'privacy' => [
                 'validated' => false,
                 'quote' => 'The information sent through this form is used only by EVENTIA SARL to review your request and get back to you. It is neither sold nor shared with third parties. To access, correct or delete your data, write to contact@eventianj.com.',
-                'application' => 'The information and CV sent through this form are used only by EVENTIA SARL to review your application and get back to you. They are neither sold nor shared with third parties. To access, correct or delete your data, write to candidature@eventianj.com.',
+                'application' => 'The information and documents sent through this form are used only by EVENTIA SARL to review your application and get back to you. They are neither sold nor shared with third parties. To access, correct or delete your data, write to candidature@eventianj.com.',
             ],
         ];
     }

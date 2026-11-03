@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /** Job applications sent from the recruitment page. CV files live in storage/app/private/cv, never in public/. */
+    /**
+     * Job applications sent from the recruitment page.
+     * Uploaded documents (CV, cover letter, photos) live in storage/app/private/candidatures, never in public/.
+     */
     public function up(): void
     {
         Schema::create('job_applications', function (Blueprint $table) {
@@ -18,11 +21,9 @@ return new class extends Migration
             $table->string('city', 120);
             $table->string('mission_type', 200);
             $table->text('experience');
-            $table->string('cv_path');
-            $table->string('cv_original_name');
-            $table->string('cv_mime', 120);
-            $table->unsignedInteger('cv_size');
-            // Set once the notification e-mail (with the CV attached) has actually been sent.
+            // { cv|cover_letter|photo_portrait|photo_full: { path, name, mime, size } }
+            $table->json('documents');
+            // Set once the notification e-mail (with the documents attached) has actually been sent.
             $table->timestamp('notified_at')->nullable();
             $table->timestamps();
         });

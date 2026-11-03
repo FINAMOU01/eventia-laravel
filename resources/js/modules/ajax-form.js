@@ -1,6 +1,5 @@
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_PATTERN = /^\+?[0-9 ().-]{6,25}$/;
-const FILE_EXTENSIONS = ['pdf', 'doc', 'docx'];
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 const IGNORED = new Set(['_token', '_form', 'website']);
 
@@ -12,7 +11,7 @@ export default ({ messages, initialStatus, initialErrors, initialMessage }) => (
     errors: { ...initialErrors },
     status: initialStatus,
     serverMessage: initialMessage,
-    fileName: '',
+    fileNames: {},
 
     fields() {
         return [...this.$refs.form.elements].filter((field) => field.name && !IGNORED.has(field.name));
@@ -22,7 +21,8 @@ export default ({ messages, initialStatus, initialErrors, initialMessage }) => (
         if (field.type === 'file') {
             const file = field.files[0];
             if (!file) return field.required ? messages.required : undefined;
-            if (!FILE_EXTENSIONS.includes(file.name.split('.').pop().toLowerCase())) return messages.invalidFile;
+            const allowed = (field.dataset.extensions || '').split(',').filter(Boolean);
+            if (allowed.length && !allowed.includes(file.name.split('.').pop().toLowerCase())) return field.dataset.invalidMessage || messages.invalidFile;
             if (file.size > MAX_FILE_BYTES) return messages.fileTooLarge;
             return undefined;
         }
@@ -98,7 +98,7 @@ export default ({ messages, initialStatus, initialErrors, initialMessage }) => (
     startOver() {
         this.$refs.form.reset();
         this.errors = {};
-        this.fileName = '';
+        this.fileNames = {};
         this.serverMessage = '';
         this.status = 'idle';
     },

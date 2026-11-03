@@ -8,6 +8,9 @@
     'hint' => null,
     'form',
     'accept' => null,
+    // File fields: accepted extensions (checked in the browser) and the message shown otherwise.
+    'extensions' => null,
+    'invalidMessage' => null,
     'placeholder' => null,
 ])
 @php
@@ -39,10 +42,10 @@
   @elseif ($type === 'file')
     {{-- Native file input kept accessible; the visible part follows the site's field style. --}}
     <div class="relative mt-1">
-      <input {{ $common->merge($attributes->except('value')->getAttributes()) }} type="file" @if ($accept) accept="{{ $accept }}" @endif x-on:change="fileName = $event.target.files[0]?.name || ''" :aria-invalid="errors.{{ $name }} ? 'true' : null" :aria-describedby="{{ $describedBy() }}" class="peer absolute inset-0 z-10 cursor-pointer opacity-0">
+      <input {{ $common->merge($attributes->except('value')->getAttributes()) }} type="file" @if ($accept) accept="{{ $accept }}" @endif data-extensions="{{ $extensions }}" data-invalid-message="{{ $invalidMessage }}" x-on:change="fileNames = { ...fileNames, {{ $name }}: $event.target.files[0]?.name || '' }" :aria-invalid="errors.{{ $name }} ? 'true' : null" :aria-describedby="{{ $describedBy() }}" class="peer absolute inset-0 z-10 cursor-pointer opacity-0">
       <div class="flex items-center gap-3 border-b border-input py-3 text-body text-fg transition-[border-color,box-shadow] duration-300 peer-hover:border-fg/40 peer-focus-visible:border-accent peer-focus-visible:shadow-[0_1px_0_0_var(--color-accent)]" :class="errors.{{ $name }} && 'border-fg shadow-[0_1px_0_0_var(--color-fg)]'">
         <x-icon name="upload" class="size-4 shrink-0 text-accent" />
-        <span class="truncate" :class="fileName ? 'text-fg' : 'text-fg-muted/60'" x-text="fileName || {{ \Illuminate\Support\Js::from($placeholder ?? '') }}">{{ $placeholder }}</span>
+        <span class="truncate" :class="fileNames.{{ $name }} ? 'text-fg' : 'text-fg-muted/60'" x-text="fileNames.{{ $name }} || {{ \Illuminate\Support\Js::from($placeholder ?? '') }}">{{ $placeholder }}</span>
       </div>
     </div>
   @else

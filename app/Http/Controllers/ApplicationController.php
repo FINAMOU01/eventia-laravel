@@ -15,15 +15,25 @@ use Illuminate\Support\Facades\Validator;
 use Throwable;
 
 /**
- * Recruitment application: the CV is stored privately (storage/app/private/cv, random file name, no public URL),
- * the application is recorded, then e-mailed to the recruitment address with the CV attached.
+ * Recruitment application: the four documents are stored privately (storage/app/private/candidatures, random
+ * file names, no public URL), the application is recorded, then e-mailed to the recruitment address with the
+ * documents attached.
  */
 class ApplicationController extends Controller
 {
     use HandlesFormSubmission;
 
+    public const MAX_FILE_KB = 5120;
+
+    public const DOCUMENT_TYPES = 'pdf,doc,docx';
+
+    public const PHOTO_TYPES = 'jpg,jpeg,png,webp,heic,heif';
+
     public function __invoke(Request $request, string $locale): JsonResponse|RedirectResponse
     {
+        $document = ['required', 'file', 'mimes:'.self::DOCUMENT_TYPES, 'max:'.self::MAX_FILE_KB];
+        $photo = ['required', 'file', 'mimes:'.self::PHOTO_TYPES, 'max:'.self::MAX_FILE_KB];
+
         $data = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:40', 'regex:/^\+?[0-9 ().-]{6,25}$/'],
@@ -31,29 +41,34 @@ class ApplicationController extends Controller
             'city' => ['required', 'string', 'max:120'],
             'mission_type' => ['required', 'string', 'max:200'],
             'experience' => ['required', 'string', 'max:3000'],
-            'cv' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
+            'cv' => $document,
+            'cover_letter' => $document,
+            'photo_portrait' => $photo,
+            'photo_full' => $photo,
             'website' => ['prohibited'],
         ], $this->validationMessages($locale))->validate();
 
         $email = Site::CONTACT['recruitmentEmail'];
-        $file = $request->file('cv');
-        $path = null;
+        $stored = [];
 
         try {
-            $path = $file->store('cv', 'local');
+            foreach (JobApplication::DOCUMENTS as $key) {
+                $file = $request->file($key);
+                $stored[$key] = [
+                    'path' => $file->store('candidatures', 'local'),
+                    'name' => $file->getClientOriginalName(),
+                    'mime' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ];
+            }
             $application = JobApplication::create([
-                ...collect($data)->except('cv')->all(),
+                ...collect($data)->except(JobApplication::DOCUMENTS)->all(),
                 'locale' => $locale,
-                'cv_path' => $path,
-                'cv_original_name' => $file->getClientOriginalName(),
-                'cv_mime' => $file->getMimeType(),
-                'cv_size' => $file->getSize(),
+                'documents' => $stored,
             ]);
         } catch (Throwable $exception) {
             report($exception);
-            if ($path) {
-                Storage::disk('local')->delete($path);
-            }
+            Storage::disk('local')->delete(array_column($stored, 'path'));
 
             return $this->respond($request, 'application', 'candidature', false, $this->failureMessage($locale, $email));
         }
