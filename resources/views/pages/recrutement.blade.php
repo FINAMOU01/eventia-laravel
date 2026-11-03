@@ -58,7 +58,7 @@
     </x-ui.container>
   </section>
 
-  {{-- Profiles --}}
+  {{-- Profiles and criteria, merged without repetition: two key criteria, then the qualities sought. --}}
   <x-ui.section tone="light" aria-labelledby="profils-titre">
     <div class="site-grid gap-y-12 lg:py-6">
       <div class="col-span-full lg:col-span-5">
@@ -71,34 +71,27 @@
         </x-ui.reveal>
       </div>
 
-      <x-ui.reveal-group as="ol" :stagger="0.1" class="col-span-full border-t border-line lg:col-span-6 lg:col-start-7 lg:self-center">
-        @foreach ($recruitment['profiles'] as $index => $profile)
-          <x-ui.reveal-item as="li" class="group/profile flex items-baseline gap-6 border-b border-line py-6 lg:py-8">
-            <span aria-hidden="true" class="w-8 shrink-0 font-display text-h3 leading-none text-accent/40">{{ Web::pad($index + 1) }}</span>
-            <span class="font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.5rem)] leading-[1.15] text-fg transition-transform duration-500 ease-eventia motion-safe:group-hover/profile:translate-x-1.5">{{ $profile }}</span>
-          </x-ui.reveal-item>
-        @endforeach
-      </x-ui.reveal-group>
+      <div class="col-span-full lg:col-span-6 lg:col-start-7 lg:self-center">
+        <h3 class="sr-only">{{ $t['criteria'] }}</h3>
+        <x-ui.reveal-group as="ul" :stagger="0.08" class="grid grid-cols-2 border-t border-line">
+          @foreach ($recruitment['requirements'] as $requirement)
+            <x-ui.reveal-item as="li" class="flex flex-col gap-2 border-b border-line py-6 pr-4 even:border-l even:pl-6 lg:py-8">
+              <span class="text-eyebrow font-medium tracking-[0.18em] text-accent uppercase">{{ $requirement['label'] }}</span>
+              <span class="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] leading-[1.1] text-fg">{{ $requirement['value'] }}</span>
+            </x-ui.reveal-item>
+          @endforeach
+        </x-ui.reveal-group>
+
+        <x-ui.reveal-group as="ol" :stagger="0.08" class="mt-2">
+          @foreach ($recruitment['qualities'] as $index => $quality)
+            <x-ui.reveal-item as="li" class="group/profile flex items-baseline gap-6 border-b border-line py-4 lg:py-5">
+              <span aria-hidden="true" class="w-8 shrink-0 font-display text-h3 leading-none text-accent/40">{{ Web::pad($index + 1) }}</span>
+              <span class="font-display text-[clamp(1.375rem,1.1rem+1vw,2rem)] leading-[1.15] text-fg transition-transform duration-500 ease-eventia motion-safe:group-hover/profile:translate-x-1.5">{{ $quality }}</span>
+            </x-ui.reveal-item>
+          @endforeach
+        </x-ui.reveal-group>
+      </div>
     </div>
-  </x-ui.section>
-
-  {{-- Criteria --}}
-  <x-ui.section tone="deep" aria-labelledby="criteres-titre">
-    <x-ui.reveal>
-      <x-ui.eyebrow>{{ $t['eyebrow'] }}</x-ui.eyebrow>
-      <h2 id="criteres-titre" class="mt-5 text-h2 text-fg">{{ $t['criteria'] }}</h2>
-    </x-ui.reveal>
-
-    <x-ui.reveal-group as="ul" :stagger="0.08" class="mt-12 grid sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
-      @foreach ($recruitment['criteria'] as $criterion)
-        <x-ui.reveal-item as="li" class="flex min-h-36 flex-col justify-end gap-3 border-t border-line py-8 sm:pr-8 lg:min-h-44">
-          @isset($criterion['label'])
-            <span class="text-eyebrow font-medium tracking-[0.18em] text-accent uppercase">{{ $criterion['label'] }}</span>
-          @endisset
-          <span class="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] leading-[1.1] text-fg">{{ $criterion['value'] }}</span>
-        </x-ui.reveal-item>
-      @endforeach
-    </x-ui.reveal-group>
   </x-ui.section>
 
   {{-- How to apply --}}

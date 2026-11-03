@@ -142,20 +142,19 @@ final class Content
                 'titleAccent' => 'EVENTIA',
                 'pageIntro' => 'Nous recherchons des personnalités capables d’incarner l’élégance, le professionnalisme et l’énergie EVENTIA.',
                 'profilesTitle' => ['Des profils. Des personnalités.', 'Une même exigence.'],
-                'profiles' => [
+                // Profiles and criteria merged without repetition (client request, 03/11): the two measurable
+                // criteria are highlighted, the qualities form a single list in the client's exact wording.
+                'requirements' => [
+                    ['label' => 'Taille minimale', 'value' => '1,70 m'],
+                    ['label' => 'Âge', 'value' => '19–30 ans'],
+                ],
+                'qualities' => [
                     'Hôtesses événementielles',
                     'Profils bilingues français / anglais',
                     'Personnes dynamiques et souriantes',
+                    'Dynamisme et ponctualité',
                     'Excellent relationnel',
                     'Bonne présentation',
-                ],
-                'criteria' => [
-                    ['label' => 'Taille minimale', 'value' => '1,70 m'],
-                    ['label' => 'Âge', 'value' => '19–30 ans'],
-                    ['value' => 'Français / Anglais'],
-                    ['value' => 'Dynamisme et ponctualité'],
-                    ['value' => 'Bonne présentation'],
-                    ['value' => 'Bon relationnel'],
                 ],
                 'note' => 'Les candidatures sont étudiées selon les besoins et les missions.',
                 'documents' => ['CV', 'Lettre de motivation', 'Photo portrait récente', 'Photo récente en pied, sans filtre'],
@@ -263,20 +262,17 @@ final class Content
                 'titleAccent' => 'EVENTIA',
                 'pageIntro' => 'We are looking for personalities able to embody the elegance, professionalism and energy of EVENTIA.',
                 'profilesTitle' => ['Profiles. Personalities.', 'One shared standard.'],
-                'profiles' => [
+                'requirements' => [
+                    ['label' => 'Minimum height', 'value' => '1.70 m'],
+                    ['label' => 'Age', 'value' => '19–30 years'],
+                ],
+                'qualities' => [
                     'Event hostesses',
                     'Bilingual French / English profiles',
                     'Dynamic, smiling people',
+                    'Energy and punctuality',
                     'Excellent interpersonal skills',
                     'Good presentation',
-                ],
-                'criteria' => [
-                    ['label' => 'Minimum height', 'value' => '1.70 m'],
-                    ['label' => 'Age', 'value' => '19–30 years'],
-                    ['value' => 'French / English'],
-                    ['value' => 'Energy and punctuality'],
-                    ['value' => 'Good presentation'],
-                    ['value' => 'Good interpersonal skills'],
                 ],
                 'note' => 'Applications are reviewed according to needs and assignments.',
                 'documents' => ['CV', 'Cover letter', 'Recent portrait photo', 'Recent full-length photo, unfiltered'],
