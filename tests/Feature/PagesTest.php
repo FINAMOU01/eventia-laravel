@@ -82,6 +82,13 @@ class PagesTest extends TestCase
 
     public function test_official_titles_and_signatures(): void
     {
+        $this->get('/')
+            ->assertSeeInOrder([
+                'Conseil en image, personal branding et communication pour faire rayonner votre identité.',
+                'Des équipes d’accueil, de protocole et d’activation pour offrir une expérience professionnelle à vos publics.',
+                'Conception et coordination d’événements professionnels, institutionnels, culturels et privés.',
+            ])
+            ->assertDontSee('Descriptions officielles des trois pôles');
         $this->get('/')->assertSee('EVENTIA SARL')->assertSee('Pourquoi EVENTIA ?');
         $this->get('/expertises/image-personal-branding')->assertSee('Faites de votre image une force.')->assertSee('Votre image. Votre influence. Votre empreinte.');
         $this->get('/expertises/hotesses')->assertSee('Le premier contact donne le ton.')->assertSee('L’élégance de l’accueil. La puissance de l’image.')->assertSee('Miss Cameroun 2026');

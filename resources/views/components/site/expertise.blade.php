@@ -31,7 +31,7 @@
             'pending' => 'Official descriptions of the three divisions',
         ],
     ][$locale];
-    $slides = array_map(fn ($item) => ['id' => $item['id'], 'number' => $item['number'], 'title' => $item['name'], 'tagline' => $item['signature'], 'href' => $item['href']], $items);
+    $slides = array_map(fn ($item) => ['id' => $item['id'], 'number' => $item['number'], 'title' => $item['name'], 'tagline' => $item['signature'], 'description' => $item['description'], 'href' => $item['href']], $items);
     $missingDescriptions = collect($items)->contains(fn ($item) => $item['description'] === null);
 @endphp
 {{-- Homepage divisions: full-bleed photo driven by an interactive list (desktop) or a swipeable slider (mobile). --}}
@@ -83,11 +83,12 @@
         <div aria-hidden="true" class="absolute inset-0 bg-deep/15 mix-blend-multiply"></div>
 
         <div class="relative px-(--gutter) pt-28 pb-8 lg:hidden">
-          <div aria-live="polite" x-bind:aria-live="isPlaying ? 'off' : 'polite'" class="min-h-[13rem] sm:min-h-[12rem]">
+          <div aria-live="polite" x-bind:aria-live="isPlaying ? 'off' : 'polite'" class="min-h-[21rem] sm:min-h-[16.5rem]">
             <div x-ref="swap">
               <span aria-hidden="true" class="block font-display text-5xl leading-none text-accent italic" x-text="items[shown].number">{{ $current['number'] }}</span>
               <h3 class="mt-4 font-display text-[clamp(1.75rem,1.2rem+2.6vw,2.5rem)] leading-[1.1] text-white" x-text="items[shown].title">{{ $current['name'] }}</h3>
               <p class="mt-4 max-w-md font-display text-h3 text-white/85 italic" x-text="items[shown].tagline">{{ $current['signature'] }}</p>
+              <p class="mt-3 max-w-md text-body text-white/75" x-show="items[shown].description" x-text="items[shown].description">{{ $current['description'] }}</p>
             </div>
           </div>
 

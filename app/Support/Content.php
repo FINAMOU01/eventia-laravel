@@ -70,7 +70,7 @@ final class Content
                     'name' => 'EVENTIA IMAGE & PERSONAL BRANDING',
                     'signature' => 'Votre image. Votre influence. Votre empreinte.',
                     'title' => 'Faites de votre image une force.',
-                    'description' => null,
+                    'description' => 'Conseil en image, personal branding et communication pour faire rayonner votre identité.',
                     'slot' => 'expertise-image',
                     'gallery' => [],
                     'sections' => [
@@ -84,7 +84,7 @@ final class Content
                     'name' => 'EVENTIA HÔTESSES',
                     'signature' => 'L’élégance de l’accueil. La puissance de l’image.',
                     'title' => 'Le premier contact donne le ton.',
-                    'description' => null,
+                    'description' => 'Des équipes d’accueil, de protocole et d’activation pour offrir une expérience professionnelle à vos publics.',
                     'slot' => 'expertise-accueil',
                     'gallery' => ['expertise-protocole', 'expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
                     'sections' => [
@@ -108,7 +108,7 @@ final class Content
                     'name' => 'EVENTIA EVENTS',
                     'signature' => 'Le prestige en scène.',
                     'title' => 'Vos idées prennent vie. Chaque détail compte.',
-                    'description' => null,
+                    'description' => 'Conception et coordination d’événements professionnels, institutionnels, culturels et privés.',
                     'slot' => 'expertise-organisation',
                     'gallery' => ['expertise-decoration', 'expertise-wedding', 'expertise-restauration'],
                     'sections' => [
@@ -194,7 +194,7 @@ final class Content
                     'name' => 'EVENTIA IMAGE & PERSONAL BRANDING',
                     'signature' => 'Your image. Your influence. Your mark.',
                     'title' => 'Make your image a strength.',
-                    'description' => null,
+                    'description' => 'Image consulting, personal branding and communication to make your identity shine.',
                     'slot' => 'expertise-image',
                     'gallery' => [],
                     'sections' => [
@@ -208,7 +208,7 @@ final class Content
                     'name' => 'EVENTIA HÔTESSES',
                     'signature' => 'The elegance of hospitality. The power of image.',
                     'title' => 'The first contact sets the tone.',
-                    'description' => null,
+                    'description' => 'Reception, protocol and activation teams to offer your audiences a professional experience.',
                     'slot' => 'expertise-accueil',
                     'gallery' => ['expertise-protocole', 'expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
                     'sections' => [
@@ -231,7 +231,7 @@ final class Content
                     'name' => 'EVENTIA EVENTS',
                     'signature' => 'Prestige on stage.',
                     'title' => 'Your ideas come to life. Every detail matters.',
-                    'description' => null,
+                    'description' => 'Design and coordination of professional, institutional, cultural and private events.',
                     'slot' => 'expertise-organisation',
                     'gallery' => ['expertise-decoration', 'expertise-wedding', 'expertise-restauration'],
                     'sections' => [
