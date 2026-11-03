@@ -23,14 +23,10 @@
             'ctaEyebrow' => 'Contact',
         ],
     ][$locale];
-    $photos = array_merge([$pole['slot']], $pole['gallery']);
-    // A division with a single photo uses it as the hero background (same treatment as the recruitment hero).
-    $heroImage = empty($pole['gallery']) ? (Media::slot($pole['slot'], $locale)['media'] ?? null) : null;
+    // Hero background: the division's main photo (same treatment as the recruitment hero).
+    $heroImage = Media::slot($pole['slot'], $locale)['media'] ?? null;
     $heroImage = ($heroImage['kind'] ?? null) === 'image' ? $heroImage : null;
-    $lead = $photos[0];
-    $side = $photos[1] ?? null;
-    $rest = array_slice($photos, 2);
-    $tones = ['light', 'surface'];
+    $gallery = $pole['gallery'];
     $ctaHref = I18n::localizeHref(Site::PRIMARY_CTA_HREF, $locale).'?pole='.$pole['id'];
 @endphp
 
@@ -70,45 +66,58 @@
     </x-ui.container>
   </section>
 
-  {{-- Photos of the division (existing photos only); same grid as the former Réalisations page. --}}
-  @unless ($heroImage)
-  <section aria-label="{{ $t['gallery'] }}" class="tone-light bg-canvas text-fg">
-    <x-ui.container class="py-section">
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
-        <x-ui.reveal variant="fade" @class(['sm:col-span-2 lg:row-start-1', 'lg:col-span-8' => $side, 'lg:col-span-12' => ! $side])>
-          <x-site.media-slot-frame :name="$lead" :locale="$locale" :ratio="$side ? 'landscape' : 'wide'" tone="light" sizes="(min-width: 1024px) 66vw, 100vw" />
-        </x-ui.reveal>
-        @if ($side)
-          <x-ui.reveal variant="fade" :delay="0.1" @class(['lg:col-span-4 lg:col-start-9 lg:row-start-1', 'sm:col-span-2' => count($rest) % 2 === 0])>
-            <x-site.media-slot-frame :name="$side" :locale="$locale" ratio="fill" tone="light" :compact="true" class="aspect-4/3 lg:aspect-auto" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
-          </x-ui.reveal>
-        @endif
-        @foreach ($rest as $i => $slot)
-          <x-ui.reveal variant="fade" :delay="0.1 * ($i % 2)" @class(['lg:col-span-6', 'lg:col-span-12' => count($rest) % 2 === 1 && $i === count($rest) - 1])>
-            <x-site.media-slot-frame :name="$slot" :locale="$locale" ratio="landscape" tone="light" sizes="(min-width: 640px) 50vw, 100vw" />
-          </x-ui.reveal>
-        @endforeach
-      </div>
-    </x-ui.container>
-  </section>
-  @endunless
-
-  {{-- Official lists of the division (services, approach, field contexts, event types…). --}}
+  {{-- Official lists of the division (services, approach, field contexts, event types…), with the other photos after the first one. --}}
   @foreach ($pole['sections'] as $index => $section)
-    @php $titleId = "pole-{$section['id']}-titre"; @endphp
-    <x-ui.section :tone="$tones[($index + 1) % 2]" aria-labelledby="{{ $titleId }}">
-      <div class="site-grid gap-y-4 lg:py-6">
-        <div class="col-span-full lg:col-span-4">
-          <x-ui.reveal class="lg:sticky lg:top-[calc(var(--header-height)+2.5rem)]">
-            <x-ui.eyebrow>{{ $pole['name'] }}</x-ui.eyebrow>
-            <h2 id="{{ $titleId }}" class="mt-5 text-h2 text-fg">{{ $section['eyebrow'] }}</h2>
-          </x-ui.reveal>
+    @php
+        $titleId = "pole-{$section['id']}-titre";
+        $tone = $section['tone'] ?? ($index % 2 === 0 ? 'light' : 'surface');
+        $pendingLabel = $section['eyebrow'].' — '.$pole['name'];
+    @endphp
+    @if ($section['layout'] === 'inline')
+      <x-ui.section :tone="$tone" aria-labelledby="{{ $titleId }}">
+        <x-ui.reveal class="flex flex-col items-center text-center">
+          <x-ui.eyebrow>{{ $pole['name'] }}</x-ui.eyebrow>
+          <h2 id="{{ $titleId }}" class="mt-5 text-h2 text-fg">{{ $section['eyebrow'] }}</h2>
+        </x-ui.reveal>
+        <div class="mx-auto mt-10 max-w-5xl lg:mt-12">
+          <x-site.item-list :items="$section['items']" layout="inline" :locale="$locale" :pending-label="$pendingLabel" />
         </div>
-        <div class="col-span-full mt-8 lg:col-span-8 lg:mt-0">
-          <x-site.item-list :items="$section['items']" :layout="$section['layout']" :locale="$locale" :pending-label="$section['eyebrow'].' — '.$pole['name']" />
+      </x-ui.section>
+    @else
+      <x-ui.section :tone="$tone" aria-labelledby="{{ $titleId }}">
+        <div class="site-grid gap-y-4">
+          <div class="col-span-full lg:col-span-4">
+            <x-ui.reveal class="lg:sticky lg:top-[calc(var(--header-height)+2.5rem)]">
+              <x-ui.eyebrow>{{ $pole['name'] }}</x-ui.eyebrow>
+              <h2 id="{{ $titleId }}" class="mt-5 text-h2 text-fg">{{ $section['eyebrow'] }}</h2>
+              @isset($section['photo'])
+                <div class="mt-10 hidden max-w-xs lg:block">
+                  <x-site.media-slot-frame :name="$section['photo']" :locale="$locale" ratio="square" tone="light" sizes="20rem" />
+                </div>
+              @endisset
+            </x-ui.reveal>
+          </div>
+          <div class="col-span-full mt-8 lg:col-span-8 lg:mt-0">
+            <x-site.item-list :items="$section['items']" :layout="$section['layout']" :locale="$locale" :pending-label="$pendingLabel" />
+          </div>
         </div>
-      </div>
-    </x-ui.section>
+      </x-ui.section>
+    @endif
+
+    {{-- The division's other photos: one row of equal frames instead of a large mosaic. --}}
+    @if ($index === 0 && $gallery)
+      <section aria-label="{{ $t['gallery'] }}" @class(['bg-canvas text-fg', 'tone-'.$tone])>
+        <x-ui.container class="pb-section">
+          <div @class(['grid grid-cols-2 gap-4 lg:gap-6', 'sm:grid-cols-3' => count($gallery) === 3, 'sm:grid-cols-4' => count($gallery) >= 4])>
+            @foreach ($gallery as $i => $slot)
+              <x-ui.reveal variant="fade" :delay="0.08 * $i" @class(['col-span-2 sm:col-span-1' => $i === 0 && count($gallery) % 2 === 1])>
+                <x-site.media-slot-frame :name="$slot" :locale="$locale" ratio="landscape" tone="light" :compact="true" sizes="(min-width: 640px) 33vw, 50vw" />
+              </x-ui.reveal>
+            @endforeach
+          </div>
+        </x-ui.container>
+      </section>
+    @endif
   @endforeach
 
   {{-- Real assignments (Hôtesses): Miss Cameroun 2026 with the COMICA partnership poster, as on the former Réalisations page. --}}
@@ -116,30 +125,20 @@
     @php $missions = $pole['missions']; @endphp
     <x-ui.section tone="surface" aria-labelledby="missions-titre">
       <div class="site-grid items-center gap-y-12">
-        <x-ui.reveal class="col-span-full lg:col-span-7">
+        <x-ui.reveal class="col-span-full lg:col-span-8">
           <x-ui.eyebrow>{{ $missions['eyebrow'] }}</x-ui.eyebrow>
           <h2 id="missions-titre" class="mt-6"><span class="block font-sans text-eyebrow font-medium tracking-[0.18em] text-accent uppercase">{{ $missions['type'] }}</span><span class="sr-only">{{ $locale === 'fr' ? ' : ' : ': ' }}</span><span class="mt-3 block font-display text-[clamp(2rem,1.3rem+2.6vw,3.75rem)] leading-[1.08] text-fg">{{ $missions['title'] }}</span></h2>
           <p class="mt-8 font-display text-[clamp(1.375rem,1.1rem+1vw,2rem)] leading-[1.35] text-fg">{{ $missions['context'] }}</p>
         </x-ui.reveal>
-        <x-ui.reveal variant="fade" :delay="0.1" class="col-span-full sm:col-span-6 sm:col-start-2 md:col-span-4 md:col-start-3 lg:col-span-4 lg:col-start-9">
-          <x-site.media-slot-frame :name="$missions['poster']" :locale="$locale" ratio="portrait" tone="light" sizes="(min-width: 1024px) 30vw, 70vw" />
+        <x-ui.reveal variant="fade" :delay="0.1" class="col-span-full mx-auto w-full max-w-64 sm:max-w-xs lg:col-span-3 lg:col-start-10 lg:max-w-none">
+          <x-site.media-slot-frame :name="$missions['poster']" :locale="$locale" ratio="portrait" tone="light" sizes="(min-width: 1024px) 22vw, 20rem" />
         </x-ui.reveal>
       </div>
 
-      @php
-          [$mLead, $mSide] = $missions['slots'];
-          $mRest = array_slice($missions['slots'], 2);
-      @endphp
-      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-12 lg:gap-6">
-        <x-ui.reveal variant="fade" class="sm:col-span-2 lg:col-span-8 lg:row-start-1">
-          <x-site.media-slot-frame :name="$mLead" :locale="$locale" ratio="landscape" tone="light" sizes="(min-width: 1024px) 66vw, 100vw" />
-        </x-ui.reveal>
-        <x-ui.reveal variant="fade" :delay="0.1" @class(['lg:col-span-4 lg:col-start-9 lg:row-start-1', 'sm:col-span-2' => count($mRest) % 2 === 0])>
-          <x-site.media-slot-frame :name="$mSide" :locale="$locale" ratio="fill" tone="light" :compact="true" class="aspect-4/3 lg:aspect-auto" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
-        </x-ui.reveal>
-        @foreach ($mRest as $i => $slot)
-          <x-ui.reveal variant="fade" :delay="0.1 * ($i % 2)" class="lg:col-span-6">
-            <x-site.media-slot-frame :name="$slot" :locale="$locale" ratio="landscape" tone="light" sizes="(min-width: 640px) 50vw, 100vw" />
+      <div class="mt-12 grid grid-cols-2 gap-4 lg:mt-16 lg:grid-cols-4 lg:gap-6">
+        @foreach ($missions['slots'] as $i => $slot)
+          <x-ui.reveal variant="fade" :delay="0.08 * $i">
+            <x-site.media-slot-frame :name="$slot" :locale="$locale" ratio="landscape" tone="light" :compact="true" sizes="(min-width: 1024px) 25vw, 50vw" />
           </x-ui.reveal>
         @endforeach
       </div>

@@ -78,7 +78,7 @@ final class Content
                     'slot' => 'expertise-image',
                     'gallery' => [],
                     'sections' => [
-                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'list', 'items' => [
+                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'bullets', 'items' => [
                             'Conseil en image et positionnement',
                             'Personal branding et image publique',
                             'Communication et visibilité médiatique',
@@ -103,9 +103,9 @@ final class Content
                     'title' => 'Le premier contact donne le ton.',
                     'description' => 'Des équipes d’accueil, de protocole et d’activation pour offrir une expérience professionnelle à vos publics.',
                     'slot' => 'expertise-accueil',
-                    'gallery' => ['expertise-protocole', 'expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
+                    'gallery' => ['expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
                     'sections' => [
-                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'list', 'items' => [
+                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'bullets', 'photo' => 'expertise-protocole', 'items' => [
                             'Accueil et orientation des invités',
                             'Accueil VIP/VVIP et protocole',
                             'Enregistrement, badges et gestion des flux',
@@ -114,7 +114,7 @@ final class Content
                             'Hôtesses promotionnelles et activations de marque',
                             'Briefing et coordination des équipes',
                         ]],
-                        ['id' => 'terrains', 'eyebrow' => 'Nos terrains d’intervention', 'layout' => 'grid', 'items' => [
+                        ['id' => 'terrains', 'eyebrow' => 'Nos terrains d’intervention', 'layout' => 'inline', 'tone' => 'deep', 'items' => [
                             'Conférences',
                             'Cérémonies',
                             'Galas',
@@ -147,8 +147,8 @@ final class Content
                     'slot' => 'expertise-organisation',
                     'gallery' => ['expertise-decoration', 'expertise-wedding', 'expertise-restauration'],
                     'sections' => [
-                        ['id' => 'evenements', 'eyebrow' => 'Types d’événements', 'layout' => 'grid', 'items' => null],
-                        ['id' => 'expertises', 'eyebrow' => 'Nos expertises', 'layout' => 'list', 'items' => null],
+                        ['id' => 'evenements', 'eyebrow' => 'Types d’événements', 'layout' => 'inline', 'items' => null],
+                        ['id' => 'expertises', 'eyebrow' => 'Nos expertises', 'layout' => 'bullets', 'items' => null],
                     ],
                 ],
             ],
@@ -238,7 +238,7 @@ final class Content
                     'slot' => 'expertise-image',
                     'gallery' => [],
                     'sections' => [
-                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'list', 'items' => [
+                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'bullets', 'items' => [
                             'Image consulting and positioning',
                             'Personal branding and public image',
                             'Communication and media visibility',
@@ -263,9 +263,9 @@ final class Content
                     'title' => 'The first contact sets the tone.',
                     'description' => 'Reception, protocol and activation teams to offer your audiences a professional experience.',
                     'slot' => 'expertise-accueil',
-                    'gallery' => ['expertise-protocole', 'expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
+                    'gallery' => ['expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
                     'sections' => [
-                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'list', 'items' => [
+                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'bullets', 'photo' => 'expertise-protocole', 'items' => [
                             'Guest reception and guidance',
                             'VIP/VVIP reception and protocol',
                             'Registration, badges and crowd flow management',
@@ -274,7 +274,7 @@ final class Content
                             'Promotional hostesses and brand activations',
                             'Team briefing and coordination',
                         ]],
-                        ['id' => 'terrains', 'eyebrow' => 'Where we operate', 'layout' => 'grid', 'items' => [
+                        ['id' => 'terrains', 'eyebrow' => 'Where we operate', 'layout' => 'inline', 'tone' => 'deep', 'items' => [
                             'Conferences',
                             'Ceremonies',
                             'Galas',
@@ -305,8 +305,8 @@ final class Content
                     'slot' => 'expertise-organisation',
                     'gallery' => ['expertise-decoration', 'expertise-wedding', 'expertise-restauration'],
                     'sections' => [
-                        ['id' => 'evenements', 'eyebrow' => 'Types of events', 'layout' => 'grid', 'items' => null],
-                        ['id' => 'expertises', 'eyebrow' => 'Our expertise', 'layout' => 'list', 'items' => null],
+                        ['id' => 'evenements', 'eyebrow' => 'Types of events', 'layout' => 'inline', 'items' => null],
+                        ['id' => 'expertises', 'eyebrow' => 'Our expertise', 'layout' => 'bullets', 'items' => null],
                     ],
                 ],
             ],

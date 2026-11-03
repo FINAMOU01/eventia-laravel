@@ -5,6 +5,8 @@
     list  -> numbered rows (former Expertises page)
     grid  -> large values in a ruled grid (former recruitment criteria)
     steps -> numbered columns with a drawn hairline (former Method section)
+    bullets -> compact two-column list with gold dots (division services)
+    inline -> one sentence separated by gold dots (field contexts, event types)
   Null items show the "content to be provided" box.
 --}}
 @php
@@ -12,6 +14,26 @@
 @endphp
 @if ($items === null)
   <x-site.pending-content :locale="$locale" :label="$pendingLabel" />
+@elseif ($layout === 'bullets')
+  {{-- Compact two-column list with a gold dot (division services). --}}
+  <x-ui.reveal-group as="ul" :stagger="0.06" class="grid border-t border-line sm:grid-cols-2 sm:gap-x-10">
+    @foreach (array_map($normalize, $items) as $item)
+      <x-ui.reveal-item as="li" class="group/bullet flex gap-4 border-b border-line py-5 lg:py-6">
+        <span aria-hidden="true" class="mt-[0.7em] size-1.5 shrink-0 rounded-full bg-accent transition-transform duration-500 group-hover/bullet:scale-150"></span>
+        <span class="text-lead text-fg">{{ $item['title'] }}@if ($item['text'])<span class="mt-1 block text-body text-fg-muted">{{ $item['text'] }}</span>@endif</span>
+      </x-ui.reveal-item>
+    @endforeach
+  </x-ui.reveal-group>
+@elseif ($layout === 'inline')
+  {{-- Single elegant sentence separated by gold dots (field contexts, event types). --}}
+  <x-ui.reveal-group as="ul" :stagger="0.07" class="flex flex-wrap items-center justify-center gap-x-9 gap-y-4 font-display text-[clamp(1.5rem,1.1rem+1.6vw,2.5rem)] leading-[1.3] text-fg">
+    @foreach (array_map($normalize, $items) as $item)
+      <x-ui.reveal-item as="li" class="flex items-center gap-3.5">
+        <span aria-hidden="true" class="size-1.5 shrink-0 translate-y-[0.15em] rounded-full bg-accent"></span>
+        <span>{{ $item['title'] }}</span>
+      </x-ui.reveal-item>
+    @endforeach
+  </x-ui.reveal-group>
 @elseif ($layout === 'grid')
   <x-ui.reveal-group as="ul" :stagger="0.08" class="grid sm:grid-cols-2 lg:grid-cols-3">
     @foreach (array_map($normalize, $items) as $item)
