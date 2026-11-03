@@ -135,7 +135,7 @@
               <div class="overflow-hidden pl-[3.25rem]">
                 <div @class(['flex flex-col items-start gap-4 pb-6 transition-transform duration-700 ease-eventia', 'translate-y-0' => $isActive, '-translate-y-2' => ! $isActive]) :class="{ 'translate-y-0': active === {{ $index }}, '-translate-y-2': active !== {{ $index }} }">
                   @if (Media::poleLogo($item['id']))
-                    <x-site.pole-logo :pole="$item" class="h-12 w-auto" />
+                    <x-site.pole-logo :pole="$item" class="size-16" />
                   @endif
                   <p class="font-display text-h3 text-white/90 italic">{{ $item['signature'] }}</p>
                   @if ($item['description'])

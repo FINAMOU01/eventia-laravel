@@ -1,5 +1,11 @@
-﻿Déposer ici les 3 logos officiels des pôles (SVG ou PNG transparent) :
-  image.svg|png     -> EVENTIA IMAGE & PERSONAL BRANDING
-  hotesses.svg|png  -> EVENTIA HÔTESSES
-  events.svg|png    -> EVENTIA EVENTS
-Ne pas recolorer ni redimensionner les fichiers.
+Logos officiels des 3 pôles (fichiers d'origine fournis par le client, conservés tels quels) :
+  eventia image&personal brading.png  -> EVENTIA IMAGE & PERSONAL BRANDING
+  eventia hotesses.jpeg               -> EVENTIA HÔTESSES
+  Eventia events.png                  -> EVENTIA EVENTS
+
+Versions utilisées par le site (480 x 480, générées à partir des originaux, sans recoloration ni déformation) :
+  image.png     -> logo bleu recadré (marges vides réduites) sur le fond blanc
+  hotesses.png  -> logo blanc sur son fond bleu (bandes claires des bords retirées)
+  events.png    -> logo bleu recadré (marges vides réduites) sur le fond blanc
+
+Pour remplacer un logo : déposer le nouveau fichier sous le même nom (image|hotesses|events, .svg, .png ou .webp).

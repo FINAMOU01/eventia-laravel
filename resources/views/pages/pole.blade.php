@@ -47,7 +47,7 @@
         <x-ui.reveal-item class="col-span-full lg:col-span-8">
           <x-ui.eyebrow>{{ $t['eyebrow'] }} · {{ $pole['number'] }}</x-ui.eyebrow>
           <div class="mt-6">
-            <x-site.pole-logo :pole="$pole" class="h-14 w-auto lg:h-16" fallback-class="font-sans text-button font-medium tracking-[0.18em] text-fg uppercase" />
+            <x-site.pole-logo :pole="$pole" class="size-24 lg:size-28" fallback-class="font-sans text-button font-medium tracking-[0.18em] text-fg uppercase" />
           </div>
           <h1 id="pole-titre" class="mt-6 font-display text-[clamp(2.5rem,1.3rem+4.2vw,5.25rem)] leading-[1.05] tracking-[-0.015em] text-fg">{{ $pole['title'] }}</h1>
         </x-ui.reveal-item>
@@ -154,7 +154,7 @@
     <x-ui.reveal-group as="ul" :stagger="0.1" class="mt-10 grid gap-4 md:grid-cols-2 lg:mt-14 lg:gap-6">
       @foreach ($others as $other)
         <x-ui.reveal-item as="li">
-          <x-site.pole-card :pole="$other" :locale="$locale" :label="$t['discover']" class="lg:aspect-16/10" />
+          <x-site.pole-card :pole="$other" :locale="$locale" :label="$t['discover']" class="lg:min-h-80 xl:aspect-16/10" />
         </x-ui.reveal-item>
       @endforeach
     </x-ui.reveal-group>
