@@ -13,7 +13,6 @@
             'howTo' => 'Comment postuler',
             'sendTo' => 'Envoyez votre candidature à',
             'documents' => 'Documents demandés',
-            'form' => 'Formulaire de candidature',
         ],
         'en' => [
             'eyebrow' => 'Careers',
@@ -23,7 +22,6 @@
             'howTo' => 'How to apply',
             'sendTo' => 'Send your application to',
             'documents' => 'Documents required',
-            'form' => 'Application form',
         ],
     ][$locale];
     $heroImage = Media::slot('recrutement-equipe', $locale)['media'] ?? null;
@@ -94,38 +92,29 @@
     </div>
   </x-ui.section>
 
-  {{-- How to apply --}}
+  {{-- How to apply (left) and application form (right) in one section; stacked on mobile. --}}
   <x-ui.section tone="surface" aria-labelledby="postuler-titre">
-    <div class="site-grid gap-y-12 lg:py-6">
-      <x-ui.reveal class="col-span-full lg:col-span-6">
+    <div class="site-grid gap-y-14 lg:py-6">
+      <x-ui.reveal class="col-span-full lg:sticky lg:top-[calc(var(--header-height)+2rem)] lg:col-span-5 lg:self-start">
         <x-ui.eyebrow>{{ $t['howTo'] }}</x-ui.eyebrow>
         <h2 id="postuler-titre" class="mt-6 font-display text-[clamp(2rem,1.4rem+2.2vw,3.25rem)] leading-[1.12] tracking-[-0.01em] text-fg">{{ $t['sendTo'] }} <a href="{{ $applicationHref }}" class="mt-3 block text-[clamp(1.25rem,0.95rem+1.1vw,2rem)] text-accent italic underline decoration-1 underline-offset-[0.2em] transition-colors [overflow-wrap:anywhere] hover:text-fg">{{ Site::CONTACT['recruitmentEmail'] }}</a></h2>
         <div class="mt-10 flex flex-col gap-4">
           <x-ui.link :href="$applicationHref" appearance="primary" size="lg" icon="arrow-right" class="w-full sm:w-auto sm:self-start">{{ $t['apply'] }}</x-ui.link>
           <p class="text-small text-fg-muted">{{ $recruitment['note'] }}</p>
         </div>
-      </x-ui.reveal>
 
-      <div class="col-span-full lg:col-span-5 lg:col-start-8">
-        <x-ui.reveal>
-          <h3 class="text-eyebrow font-medium tracking-[0.18em] text-fg-muted uppercase">{{ $t['documents'] }}</h3>
-        </x-ui.reveal>
-        <x-ui.reveal-group as="ol" :stagger="0.08" class="mt-6 border-t border-line">
+        <h3 class="mt-12 text-eyebrow font-medium tracking-[0.18em] text-fg-muted uppercase">{{ $t['documents'] }}</h3>
+        <ol class="mt-6 border-t border-line">
           @foreach ($recruitment['documents'] as $index => $document)
-            <x-ui.reveal-item as="li" class="flex items-baseline gap-5 border-b border-line py-5">
+            <li class="flex items-baseline gap-5 border-b border-line py-5">
               <span aria-hidden="true" class="w-6 shrink-0 text-eyebrow text-accent">{{ Web::pad($index + 1) }}</span>
               <span class="font-display text-h3 text-fg">{{ $document }}</span>
-            </x-ui.reveal-item>
+            </li>
           @endforeach
-        </x-ui.reveal-group>
-      </div>
-    </div>
-  </x-ui.section>
+        </ol>
+      </x-ui.reveal>
 
-  {{-- Application form (CV upload), requested in the EVENTIA SARL specification. --}}
-  <x-ui.section tone="light" aria-label="{{ $t['form'] }}">
-    <div class="site-grid lg:py-6">
-      <x-ui.reveal class="col-span-full lg:col-span-8 lg:col-start-3">
+      <x-ui.reveal :delay="0.1" class="col-span-full lg:col-span-7 xl:col-span-6 xl:col-start-7">
         <x-site.application-form :locale="$locale" />
       </x-ui.reveal>
     </div>
