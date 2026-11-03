@@ -24,6 +24,9 @@
         ],
     ][$locale];
     $photos = array_merge([$pole['slot']], $pole['gallery']);
+    // A division with a single photo uses it as the hero background (same treatment as the recruitment hero).
+    $heroImage = empty($pole['gallery']) ? (Media::slot($pole['slot'], $locale)['media'] ?? null) : null;
+    $heroImage = ($heroImage['kind'] ?? null) === 'image' ? $heroImage : null;
     $lead = $photos[0];
     $side = $photos[1] ?? null;
     $rest = array_slice($photos, 2);
@@ -32,11 +35,17 @@
 
 @section('content')
   {{-- Hero: same treatment as the former Expertises / Réalisations heroes. --}}
-  <section aria-labelledby="pole-titre" class="tone-deep relative isolate overflow-hidden bg-ink text-fg">
-    <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_85%_0%,rgb(4_58_164/0.55),transparent_70%),radial-gradient(ellipse_60%_50%_at_0%_100%,rgb(0_48_106/0.8),transparent_70%)]"></div>
-    <span aria-hidden="true" class="pointer-events-none absolute -right-[0.06em] bottom-[-0.2em] -z-10 font-display text-[clamp(8rem,4rem+16vw,22rem)] leading-none text-white/[0.035] italic select-none">{{ $t['backdrop'][$pole['id']] }}</span>
+  <section aria-labelledby="pole-titre" @class(['tone-deep relative isolate overflow-hidden bg-ink text-fg', 'flex min-h-[min(88svh,48rem)]' => $heroImage])>
+    @if ($heroImage)
+      <x-ui.img :src="$heroImage['src']" :alt="$heroImage['alt']" :preload="true" sizes="100vw" class="-z-20 object-cover object-[50%_20%]" />
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-deep/30"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-t from-ink/95 via-ink/55 to-ink/60 lg:from-ink/95 lg:via-ink/50 lg:to-ink/35"></div>
+    @else
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_85%_0%,rgb(4_58_164/0.55),transparent_70%),radial-gradient(ellipse_60%_50%_at_0%_100%,rgb(0_48_106/0.8),transparent_70%)]"></div>
+      <span aria-hidden="true" class="pointer-events-none absolute -right-[0.06em] bottom-[-0.2em] -z-10 font-display text-[clamp(8rem,4rem+16vw,22rem)] leading-none text-white/[0.035] italic select-none">{{ $t['backdrop'][$pole['id']] }}</span>
+    @endif
 
-    <x-ui.container class="pt-[calc(var(--header-height)+2.5rem)] pb-section lg:pt-[calc(var(--header-height)+3.5rem)]">
+    <x-ui.container @class(['pt-[calc(var(--header-height)+2.5rem)] pb-section lg:pt-[calc(var(--header-height)+3.5rem)]', 'flex flex-1 flex-col justify-end lg:pb-16' => $heroImage])>
       <x-ui.reveal-group :stagger="0.14" :delay="0.1" class="site-grid items-end gap-y-8">
         <x-ui.reveal-item class="col-span-full lg:col-span-8">
           <x-ui.eyebrow>{{ $t['eyebrow'] }} · {{ $pole['number'] }}</x-ui.eyebrow>
@@ -58,6 +67,7 @@
   </section>
 
   {{-- Photos of the division (existing photos only); same grid as the former Réalisations page. --}}
+  @unless ($heroImage)
   <section aria-label="{{ $t['gallery'] }}" class="tone-light bg-canvas text-fg">
     <x-ui.container class="py-section">
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
@@ -77,6 +87,7 @@
       </div>
     </x-ui.container>
   </section>
+  @endunless
 
   {{-- Official lists of the division (services, approach, field contexts, event types…). --}}
   @foreach ($pole['sections'] as $index => $section)

@@ -78,8 +78,21 @@ final class Content
                     'slot' => 'expertise-image',
                     'gallery' => [],
                     'sections' => [
-                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'list', 'items' => null],
-                        ['id' => 'approche', 'eyebrow' => 'Notre approche', 'layout' => 'steps', 'items' => null],
+                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'list', 'items' => [
+                            'Conseil en image et positionnement',
+                            'Personal branding et image publique',
+                            'Communication et visibilité médiatique',
+                            'Présence digitale et réseaux sociaux',
+                            'Préparation aux prises de parole et media training',
+                            'Stylisme, préparation visuelle et shootings',
+                            "Création de supports\u{00A0}: identité visuelle, cartes de visite, plaquettes, brochures et visuels digitaux",
+                        ]],
+                        ['id' => 'approche', 'eyebrow' => 'Notre approche', 'layout' => 'steps', 'items' => [
+                            'Écouter.',
+                            'Clarifier votre positionnement.',
+                            'Construire les bons supports.',
+                            'Renforcer votre visibilité.',
+                        ]],
                     ],
                 ],
                 [
@@ -207,8 +220,21 @@ final class Content
                     'slot' => 'expertise-image',
                     'gallery' => [],
                     'sections' => [
-                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'list', 'items' => null],
-                        ['id' => 'approche', 'eyebrow' => 'Our approach', 'layout' => 'steps', 'items' => null],
+                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'list', 'items' => [
+                            'Image consulting and positioning',
+                            'Personal branding and public image',
+                            'Communication and media visibility',
+                            'Digital presence and social media',
+                            'Public speaking preparation and media training',
+                            'Styling, visual preparation and photo shoots',
+                            'Creation of materials: visual identity, business cards, leaflets, brochures and digital visuals',
+                        ]],
+                        ['id' => 'approche', 'eyebrow' => 'Our approach', 'layout' => 'steps', 'items' => [
+                            'Listen.',
+                            'Clarify your positioning.',
+                            'Build the right materials.',
+                            'Strengthen your visibility.',
+                        ]],
                     ],
                 ],
                 [

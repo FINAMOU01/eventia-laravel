@@ -98,7 +98,15 @@ class PagesTest extends TestCase
             ])
             ->assertDontSee('Les quatre engagements d’EVENTIA');
         $this->get('/')->assertSee('EVENTIA SARL')->assertSee('Pourquoi EVENTIA ?');
-        $this->get('/expertises/image-personal-branding')->assertSee('Faites de votre image une force.')->assertSee('Votre image. Votre influence. Votre empreinte.');
+        $this->get('/expertises/image-personal-branding')->assertSee('Faites de votre image une force.')->assertSee('Votre image. Votre influence. Votre empreinte.')
+            ->assertSeeInOrder([
+                'Nos services', 'Conseil en image et positionnement', 'Personal branding et image publique', 'Communication et visibilité médiatique',
+                'Présence digitale et réseaux sociaux', 'Préparation aux prises de parole et media training', 'Stylisme, préparation visuelle et shootings',
+                'identité visuelle, cartes de visite, plaquettes, brochures et visuels digitaux',
+                'Notre approche', 'Écouter.', 'Clarifier votre positionnement.', 'Construire les bons supports.', 'Renforcer votre visibilité.',
+            ])
+            ->assertDontSee('Contenu à fournir par le client')
+            ->assertDontSee('aria-label="Le pôle en images"', false);
         $this->get('/expertises/hotesses')->assertSee('Le premier contact donne le ton.')->assertSee('L’élégance de l’accueil. La puissance de l’image.')->assertSee('Miss Cameroun 2026');
         $this->get('/expertises/events')->assertSee('Vos idées prennent vie. Chaque détail compte.')->assertSee('Le prestige en scène.');
         $this->get('/agence')->assertSee('Une agence, trois expertises complémentaires.')->assertSee('Noura Njikam');
