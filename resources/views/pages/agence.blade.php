@@ -67,22 +67,20 @@
       </x-ui.reveal>
       <x-ui.reveal :delay="0.1" class="col-span-full flex flex-col gap-10 lg:col-span-6 lg:col-start-7">
         @if ($agency['presentation'])
-          <p class="text-lead text-fg-muted">{{ $agency['presentation'] }}</p>
+          <p class="font-display text-[clamp(1.375rem,1.1rem+1vw,2rem)] leading-[1.35] text-fg">{{ $agency['presentation'] }}</p>
         @else
           <x-site.pending-content :locale="$locale" :label="$t['presentation']" />
         @endif
-        <div class="border-t border-line pt-8">
-          <x-ui.eyebrow>{{ $t['mission'] }}</x-ui.eyebrow>
-          @if ($agency['mission'])
+        @if ($agency['mission'])
+          <div class="border-t border-line pt-8">
+            <x-ui.eyebrow>{{ $t['mission'] }}</x-ui.eyebrow>
             <p class="mt-4 text-lead text-fg">{{ $agency['mission'] }}</p>
-          @else
-            <x-site.pending-content :locale="$locale" :label="$t['mission']" :compact="true" class="mt-4" />
-          @endif
-        </div>
+          </div>
+        @endif
         <div class="border-t border-line pt-8">
           <x-ui.eyebrow>{{ $t['signature'] }}</x-ui.eyebrow>
           @if ($agency['signature'])
-            <p class="mt-4 font-display text-h3 text-fg italic">{{ $agency['signature'] }}</p>
+            <p class="mt-4 font-display text-h3 text-accent italic">{{ $open }}{{ $agency['signature'] }}{{ $close }}</p>
           @else
             <x-site.pending-content :locale="$locale" :label="$t['signature']" :compact="true" class="mt-4" />
           @endif
@@ -97,15 +95,10 @@
       <x-ui.eyebrow>EVENTIA SARL</x-ui.eyebrow>
       <h2 id="agence-poles-titre" class="mt-5 text-h2 text-fg">{{ $t['poles'] }}</h2>
     </x-ui.reveal>
-    <x-ui.reveal-group as="ul" :stagger="0.1" class="mt-12 grid border-t border-line lg:mt-16 lg:grid-cols-3">
+    <x-ui.reveal-group as="ul" :stagger="0.1" class="mt-10 grid gap-4 md:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-6">
       @foreach ($content['poles'] as $pole)
-        <x-ui.reveal-item as="li" class="border-b border-line lg:border-l lg:px-8 lg:first:border-l-0 lg:first:pl-0 lg:last:pr-0">
-          <a href="{{ I18n::localizeHref(Metadata::PATHS[$pole['id']], $locale) }}" class="group/pole flex h-full flex-col gap-5 py-10">
-            <span aria-hidden="true" class="font-display text-h3 leading-none text-accent/40 transition-colors duration-500 group-hover/pole:text-accent">{{ $pole['number'] }}</span>
-            <x-site.pole-logo :pole="$pole" class="h-12 w-auto" fallback-class="font-sans text-button font-medium tracking-[0.18em] text-fg uppercase" />
-            <span class="font-display text-[clamp(1.375rem,1.1rem+1vw,2rem)] leading-[1.2] text-fg italic transition-transform duration-500 ease-eventia motion-safe:group-hover/pole:translate-x-1.5">{{ $pole['signature'] }}</span>
-            <span class="mt-auto inline-flex items-center gap-3 font-sans text-button tracking-[0.12em] text-fg uppercase transition-colors group-hover/pole:text-accent">{{ $t['discover'] }}<x-icon name="arrow-right" class="size-4 transition-transform duration-300 group-hover/pole:translate-x-1" /></span>
-          </a>
+        <x-ui.reveal-item as="li" class="md:last:col-span-2 lg:last:col-span-1">
+          <x-site.pole-card :pole="$pole" :locale="$locale" :label="$t['discover']" sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" class="h-full min-h-80 lg:min-h-96" />
         </x-ui.reveal-item>
       @endforeach
     </x-ui.reveal-group>
@@ -121,7 +114,7 @@
         </x-ui.reveal>
       </div>
       <div class="col-span-full mt-8 lg:col-span-8 lg:mt-0">
-        <x-site.item-list :items="$agency['commitments']" layout="list" :locale="$locale" :pending-label="$t['commitmentsPending']" />
+        <x-site.item-list :items="$agency['commitments']" layout="bullets" :locale="$locale" :pending-label="$t['commitmentsPending']" />
       </div>
     </div>
   </x-ui.section>

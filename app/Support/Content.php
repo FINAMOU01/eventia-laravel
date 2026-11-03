@@ -167,11 +167,17 @@ final class Content
             ],
             'agency' => [
                 'title' => 'Une agence, trois expertises complémentaires.',
-                'presentation' => null,
+                'presentation' => 'EVENTIA SARL accompagne les entreprises, institutions, marques et particuliers dans la valorisation de leur image, l’accueil de leurs publics et la réalisation de leurs événements.',
+                // No separate mission text provided: the presentation covers it (the block is hidden while null).
                 'mission' => null,
-                'signature' => null,
-                // Five commitments.
-                'commitments' => null,
+                'signature' => 'Nous créons ce qui vous distingue.',
+                'commitments' => [
+                    'Écoute et accompagnement personnalisé',
+                    'Professionnalisme et sens du service',
+                    'Créativité et cohérence de l’image',
+                    'Organisation et coordination',
+                    'Attention portée aux détails',
+                ],
             ],
             // Kept at the client's request on the agency page (previously validated wording).
             'team' => [
@@ -338,10 +344,16 @@ final class Content
             ],
             'agency' => [
                 'title' => 'One agency, three complementary areas of expertise.',
-                'presentation' => null,
+                'presentation' => 'EVENTIA SARL supports companies, institutions, brands and individuals in enhancing their image, welcoming their audiences and bringing their events to life.',
                 'mission' => null,
-                'signature' => null,
-                'commitments' => null,
+                'signature' => 'We create what sets you apart.',
+                'commitments' => [
+                    'Attentive listening and personalised support',
+                    'Professionalism and a sense of service',
+                    'Creativity and a consistent image',
+                    'Organisation and coordination',
+                    'Attention to detail',
+                ],
             ],
             'team' => [
                 'quote' => 'Hospitality is the first reflection of your image.',

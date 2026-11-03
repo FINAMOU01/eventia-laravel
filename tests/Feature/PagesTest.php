@@ -125,7 +125,12 @@ class PagesTest extends TestCase
                 'Logistique, restauration et prestataires', 'Communication événementielle',
             ])
             ->assertDontSee('Contenu à fournir par le client');
-        $this->get('/agence')->assertSee('Une agence, trois expertises complémentaires.')->assertSee('Noura Njikam');
+        $this->get('/agence')->assertSee('Une agence, trois expertises complémentaires.')->assertSee('Noura Njikam')
+            ->assertSee('EVENTIA SARL accompagne les entreprises, institutions, marques et particuliers dans la valorisation de leur image, l’accueil de leurs publics et la réalisation de leurs événements.')
+            ->assertSee('Nous créons ce qui vous distingue.')
+            ->assertSeeInOrder(['Nos engagements', 'Écoute et accompagnement personnalisé', 'Professionnalisme et sens du service', 'Créativité et cohérence de l’image', 'Organisation et coordination', 'Attention portée aux détails'])
+            ->assertSee('href="/expertises/image-personal-branding"', false)->assertSee('href="/expertises/hotesses"', false)->assertSee('href="/expertises/events"', false)
+            ->assertDontSee('Contenu à fournir par le client');
         $this->get('/recrutement')
             ->assertSee('Rejoignez l’équipe <em class="text-accent italic">EVENTIA</em>', false)
             ->assertSee('Nous recherchons des personnalités capables d’incarner l’élégance, le professionnalisme et l’énergie EVENTIA.')
