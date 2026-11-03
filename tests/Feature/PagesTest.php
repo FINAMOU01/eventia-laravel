@@ -87,7 +87,15 @@ class PagesTest extends TestCase
         $this->get('/expertises/hotesses')->assertSee('Le premier contact donne le ton.')->assertSee('L’élégance de l’accueil. La puissance de l’image.')->assertSee('Miss Cameroun 2026');
         $this->get('/expertises/events')->assertSee('Vos idées prennent vie. Chaque détail compte.')->assertSee('Le prestige en scène.');
         $this->get('/agence')->assertSee('Une agence, trois expertises complémentaires.')->assertSee('Noura Njikam');
-        $this->get('/recrutement')->assertSee('Rejoignez les équipes EVENTIA.');
+        $this->get('/recrutement')
+            ->assertSee('Rejoignez l’équipe <em class="text-accent italic">EVENTIA</em>', false)
+            ->assertSee('Nous recherchons des personnalités capables d’incarner l’élégance, le professionnalisme et l’énergie EVENTIA.')
+            ->assertSeeInOrder(['Hôtesses événementielles', 'Profils bilingues français / anglais', 'Personnes dynamiques et souriantes', 'Excellent relationnel', 'Bonne présentation'])
+            ->assertSeeInOrder(['Taille minimale', '1,70 m', 'Âge', '19–30 ans', 'Français / Anglais', 'Dynamisme et ponctualité', 'Bonne présentation', 'Bon relationnel'])
+            ->assertSeeInOrder(['CV', 'Lettre de motivation', 'Photo portrait récente', 'Photo récente en pied, sans filtre'])
+            ->assertSee('Les candidatures sont étudiées selon les besoins et les missions.')
+            ->assertSee('mailto:candidature@eventianj.com?subject=Candidature%20%E2%80%94%20EVENTIA&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20rejoindre%20l%E2%80%99%C3%A9quipe%20EVENTIA.%20Vous%20trouverez%20ci-joint%20%3A%0A-%20CV%0A-%20Lettre%20de%20motivation%0A-%20Photo%20portrait%20r%C3%A9cente%0A-%20Photo%20r%C3%A9cente%20en%20pied%2C%20sans%20filtre%0A%0ACordialement%2C%0A', false)
+            ->assertDontSee('data-pending-content', false);
         $this->get('/contact')->assertSee('Envoyer ma demande');
     }
 

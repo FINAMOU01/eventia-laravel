@@ -41,6 +41,16 @@ final class Content
         return collect(self::get($locale)['poles'])->firstWhere('id', $id);
     }
 
+    /** Pre-filled application e-mail listing the requested documents (same wording as the previous site). */
+    public static function applicationHref(string $locale): string
+    {
+        $documents = implode("\n", array_map(fn ($document) => "- {$document}", self::get($locale)['recruitment']['documents']));
+
+        return $locale === 'en'
+            ? Site::mailtoHref('Application — EVENTIA', "Hello,\n\nI would like to join the EVENTIA team. Please find attached:\n{$documents}\n\nKind regards,\n", Site::CONTACT['recruitmentEmail'])
+            : Site::mailtoHref('Candidature — EVENTIA', "Bonjour,\n\nJe souhaite rejoindre l’équipe EVENTIA. Vous trouverez ci-joint :\n{$documents}\n\nCordialement,\n", Site::CONTACT['recruitmentEmail']);
+    }
+
     private static function fr(): array
     {
         return [
@@ -127,8 +137,28 @@ final class Content
                 'ambition' => 'Faire de chaque rencontre avec votre public une expérience qui vous ressemble.',
             ],
             'recruitment' => [
-                'title' => 'Rejoignez les équipes EVENTIA.',
-                'profiles' => null,
+                // Official wording provided by the client for the recruitment page.
+                'title' => 'Rejoignez l’équipe EVENTIA',
+                'titleAccent' => 'EVENTIA',
+                'pageIntro' => 'Nous recherchons des personnalités capables d’incarner l’élégance, le professionnalisme et l’énergie EVENTIA.',
+                'profilesTitle' => ['Des profils. Des personnalités.', 'Une même exigence.'],
+                'profiles' => [
+                    'Hôtesses événementielles',
+                    'Profils bilingues français / anglais',
+                    'Personnes dynamiques et souriantes',
+                    'Excellent relationnel',
+                    'Bonne présentation',
+                ],
+                'criteria' => [
+                    ['label' => 'Taille minimale', 'value' => '1,70 m'],
+                    ['label' => 'Âge', 'value' => '19–30 ans'],
+                    ['value' => 'Français / Anglais'],
+                    ['value' => 'Dynamisme et ponctualité'],
+                    ['value' => 'Bonne présentation'],
+                    ['value' => 'Bon relationnel'],
+                ],
+                'note' => 'Les candidatures sont étudiées selon les besoins et les missions.',
+                'documents' => ['CV', 'Lettre de motivation', 'Photo portrait récente', 'Photo récente en pied, sans filtre'],
                 // Choice list for "Type de mission recherché"; a free-text field is shown until the client provides it.
                 'missionTypes' => null,
             ],
@@ -229,8 +259,27 @@ final class Content
                 'ambition' => 'Making every encounter with your audience an experience that reflects who you are.',
             ],
             'recruitment' => [
-                'title' => 'Join the EVENTIA teams.',
-                'profiles' => null,
+                'title' => 'Join the EVENTIA team',
+                'titleAccent' => 'EVENTIA',
+                'pageIntro' => 'We are looking for personalities able to embody the elegance, professionalism and energy of EVENTIA.',
+                'profilesTitle' => ['Profiles. Personalities.', 'One shared standard.'],
+                'profiles' => [
+                    'Event hostesses',
+                    'Bilingual French / English profiles',
+                    'Dynamic, smiling people',
+                    'Excellent interpersonal skills',
+                    'Good presentation',
+                ],
+                'criteria' => [
+                    ['label' => 'Minimum height', 'value' => '1.70 m'],
+                    ['label' => 'Age', 'value' => '19–30 years'],
+                    ['value' => 'French / English'],
+                    ['value' => 'Energy and punctuality'],
+                    ['value' => 'Good presentation'],
+                    ['value' => 'Good interpersonal skills'],
+                ],
+                'note' => 'Applications are reviewed according to needs and assignments.',
+                'documents' => ['CV', 'Cover letter', 'Recent portrait photo', 'Recent full-length photo, unfiltered'],
                 'missionTypes' => null,
             ],
             'contact' => [
