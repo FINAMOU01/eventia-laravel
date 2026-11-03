@@ -2,14 +2,16 @@
 @php
     $text = Site::text($locale);
     $t = [
-        'fr' => ['nav' => 'Navigation du pied de page', 'navTitle' => 'Navigation', 'rights' => 'Tous droits réservés.', 'legal' => 'Mentions légales'],
-        'en' => ['nav' => 'Footer navigation', 'navTitle' => 'Navigation', 'rights' => 'All rights reserved.', 'legal' => 'Legal notice'],
+        'fr' => ['nav' => 'Navigation du pied de page', 'navTitle' => 'Navigation', 'poles' => 'Nos expertises', 'socials' => 'Réseaux sociaux', 'rights' => 'Tous droits réservés.', 'legal' => 'Mentions légales'],
+        'en' => ['nav' => 'Footer navigation', 'navTitle' => 'Navigation', 'poles' => 'Our expertise', 'socials' => 'Social media', 'rights' => 'All rights reserved.', 'legal' => 'Legal notice'],
     ][$locale];
     $contact = Site::CONTACT;
+    $navigation = Site::navigation($locale);
+    $poles = collect($navigation)->firstWhere('id', 'expertise')['children'];
 @endphp
 <footer class="tone-deep bg-ink pb-16 text-fg md:pb-0">
   <x-ui.container :grid="true" class="gap-y-6 py-8 md:gap-y-8 lg:py-12">
-    <div class="col-span-full flex flex-col gap-4 md:col-span-8 lg:col-span-4">
+    <div class="col-span-full flex flex-col gap-4 md:col-span-8 lg:col-span-3">
       <a href="{{ I18n::localizeHref('/#accueil', $locale) }}" aria-label="{{ Site::NAME }} — {{ $text['backHome'] }}" class="flex items-center gap-3 self-start rounded-media">
         <x-site.logo class="h-10 lg:h-11" />
         <span aria-hidden="true" class="font-display text-[1.375rem] tracking-[0.12em] text-fg">{{ Site::NAME }}</span>
@@ -18,16 +20,26 @@
       <p class="text-eyebrow font-medium tracking-[0.18em] text-accent uppercase">{{ implode(' ', array_map(fn ($word) => "{$word}.", $text['signature'])) }}</p>
     </div>
 
-    <nav aria-label="{{ $t['nav'] }}" class="col-span-full md:col-span-4 lg:col-span-4 lg:col-start-6">
-      <p class="text-eyebrow text-fg-muted uppercase">{{ $t['navTitle'] }}</p>
-      <ul class="mt-3 grid grid-cols-3 gap-x-4 gap-y-2 text-small md:mt-4 md:grid-cols-2 md:gap-x-6 md:gap-y-2.5">
-        @foreach (Site::navigation($locale) as $item)
-          <li><a href="{{ $item['href'] }}" class="text-fg transition-colors hover:text-accent">{{ $item['label'] }}</a></li>
-        @endforeach
-      </ul>
+    <nav aria-label="{{ $t['nav'] }}" class="col-span-full grid grid-cols-2 gap-x-6 gap-y-6 md:col-span-8 lg:col-span-5 lg:col-start-5">
+      <div>
+        <p class="text-eyebrow text-fg-muted uppercase">{{ $t['navTitle'] }}</p>
+        <ul class="mt-3 flex flex-col gap-2 text-small md:mt-4 md:gap-2.5">
+          @foreach ($navigation as $item)
+            <li><a href="{{ $item['href'] }}" class="text-fg transition-colors hover:text-accent">{{ $item['label'] }}</a></li>
+          @endforeach
+        </ul>
+      </div>
+      <div>
+        <p class="text-eyebrow text-fg-muted uppercase">{{ $t['poles'] }}</p>
+        <ul class="mt-3 flex flex-col gap-2 text-small md:mt-4 md:gap-2.5">
+          @foreach ($poles as $pole)
+            <li><a href="{{ $pole['href'] }}" class="text-fg transition-colors hover:text-accent">{{ $pole['label'] }}</a></li>
+          @endforeach
+        </ul>
+      </div>
     </nav>
 
-    <div class="col-span-full md:col-span-4 lg:col-span-3 lg:col-start-10">
+    <div class="col-span-full md:col-span-8 lg:col-span-3 lg:col-start-10">
       <p class="text-eyebrow text-fg-muted uppercase">Contact</p>
       <ul class="mt-3 flex flex-col gap-2 text-small md:mt-4 md:gap-2.5">
         <li><x-ui.link href="mailto:{{ $contact['email'] }}" class="break-all">{{ $contact['email'] }}</x-ui.link></li>
@@ -36,6 +48,18 @@
           <x-ui.link :href="$contact['phone2Href']">{{ $contact['phone2Display'] }}</x-ui.link>
         </li>
         <li class="text-fg">{{ $contact['address'] }}</li>
+      </ul>
+      <p class="mt-6 text-eyebrow text-fg-muted uppercase">{{ $t['socials'] }}</p>
+      <ul class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-small">
+        @foreach (Site::SOCIALS as $social)
+          <li>
+            @if ($social['url'])
+              <x-ui.link :href="$social['url']" target="_blank">{{ $social['label'][$locale] }}</x-ui.link>
+            @else
+              <span class="text-fg">{{ $social['label'][$locale] }}</span>
+            @endif
+          </li>
+        @endforeach
       </ul>
     </div>
   </x-ui.container>

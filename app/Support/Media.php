@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-/** Port of lib/media.ts: media manifest, hero video and homepage carousel. */
+/** Media manifest: hero video, photo slots (alt texts FR/EN) and division logos. */
 final class Media
 {
     public const HERO_VIDEO = [
@@ -137,7 +137,7 @@ final class Media
                 'media' => [
                     'kind' => 'image',
                     'src' => '/media/equipe/NouraPDG.PNG',
-                    'alt' => 'Portrait de Noura Njikam, PDG d’EVENTIA BY N.J, en tailleur bleu',
+                    'alt' => 'Portrait de Noura Njikam, PDG d’EVENTIA SARL, en tailleur bleu',
                     'anchor' => 'top',
                 ],
             ],
@@ -233,7 +233,7 @@ final class Media
         ],
         'equipe-noura' => [
             'label' => 'Portrait — Noura Njikam',
-            'alt' => 'Portrait of Noura Njikam, CEO of EVENTIA BY N.J, in a blue suit',
+            'alt' => 'Portrait of Noura Njikam, CEO of EVENTIA SARL, in a blue suit',
         ],
         'equipe-groupe' => [
             'label' => 'The EVENTIA team',
@@ -247,42 +247,6 @@ final class Media
         'recrutement-equipe' => [
             'label' => 'The EVENTIA hostesses',
             'alt' => 'EVENTIA hostesses in royal blue satin dresses in front of the Eventia wall',
-        ],
-    ];
-
-    /** Homepage Réalisations carousel, in display order. Add an item to add a slide (real event photos only). */
-    public const REALISATIONS_SHOWCASE = [
-        [
-            'realisationId' => 'miss-cameroun-2026',
-            'src' => '/media/realisations/miss-cameroun-2026/mis cameroun4.PNG',
-            'alt' => [
-                'fr' => 'Les hôtesses EVENTIA en robes de satin bleu roi devant le mur Eventia lors de Miss Cameroun 2026',
-                'en' => 'EVENTIA hostesses in royal blue satin dresses in front of the Eventia wall at Miss Cameroun 2026',
-            ],
-        ],
-        [
-            'realisationId' => 'miss-cameroun-2026',
-            'src' => '/media/realisations/miss-cameroun-2026/misscameroun1.jpg',
-            'alt' => [
-                'fr' => 'Hôtesses EVENTIA en uniforme bleu présentant les écharpes des lauréates sur la scène de Miss Cameroun',
-                'en' => 'EVENTIA hostesses in blue uniforms presenting the winners’ sashes on the Miss Cameroun stage',
-            ],
-        ],
-        [
-            'realisationId' => 'miss-cameroun-2026',
-            'src' => '/media/realisations/miss-cameroun-2026/miss cameroun3.png',
-            'alt' => [
-                'fr' => 'Remise des écharpes sur la scène de la finale Miss Cameroun, avec une hôtesse EVENTIA en robe bleue',
-                'en' => 'Sash ceremony on the stage of the Miss Cameroun final, with an EVENTIA hostess in a blue dress',
-            ],
-        ],
-        [
-            'realisationId' => 'miss-cameroun-2026',
-            'src' => '/media/realisations/miss-cameroun-2026/miss cameroun2.jpg',
-            'alt' => [
-                'fr' => 'Hôtesses EVENTIA remettant les sacs cadeaux aux candidates sur scène lors de Miss Cameroun',
-                'en' => 'EVENTIA hostesses handing gift bags to the contestants on stage at Miss Cameroun',
-            ],
         ],
     ];
 
@@ -305,6 +269,21 @@ final class Media
     public static function url(string $path): string
     {
         return implode('/', array_map('rawurlencode', explode('/', $path)));
+    }
+
+    /**
+     * Official logo of a division (image, hotesses, events), as delivered by the client in public/media/brand/poles.
+     * Null until the file is provided: views then show the division name in text, never a recreated logo.
+     */
+    public static function poleLogo(string $pole): ?string
+    {
+        foreach (['svg', 'png', 'webp'] as $extension) {
+            if (is_file(public_path("media/brand/poles/{$pole}.{$extension}"))) {
+                return "/media/brand/poles/{$pole}.{$extension}";
+            }
+        }
+
+        return null;
     }
 
     /** next.config defaults: images.imageSizes + images.deviceSizes. */

@@ -5,26 +5,28 @@ namespace Tests\Feature;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
-/** Every URL of the Next.js site answers with the same title, canonical URL and language as the original. */
+/** Every page of the EVENTIA SARL structure answers with the right title, canonical URL and language. */
 class PagesTest extends TestCase
 {
     public static function pages(): array
     {
         return [
-            ['/', 'fr', 'EVENTIA BY N.J — L’excellence de l’accueil au service de votre image', 'https://eventianj.com'],
-            ['/expertises', 'fr', 'Expertises | EVENTIA BY N.J', 'https://eventianj.com/expertises'],
-            ['/realisations', 'fr', 'Réalisations | EVENTIA BY N.J', 'https://eventianj.com/realisations'],
-            ['/equipe', 'fr', 'L’équipe | EVENTIA BY N.J', 'https://eventianj.com/equipe'],
-            ['/recrutement', 'fr', 'Recrutement | EVENTIA BY N.J', 'https://eventianj.com/recrutement'],
-            ['/contact', 'fr', 'Contact | EVENTIA BY N.J', 'https://eventianj.com/contact'],
-            ['/mentions-legales', 'fr', 'Mentions légales | EVENTIA BY N.J', 'https://eventianj.com/mentions-legales'],
-            ['/en', 'en', 'EVENTIA BY N.J — Hospitality excellence in service of your image', 'https://eventianj.com/en'],
-            ['/en/expertises', 'en', 'Expertise | EVENTIA BY N.J', 'https://eventianj.com/en/expertises'],
-            ['/en/realisations', 'en', 'Our work | EVENTIA BY N.J', 'https://eventianj.com/en/realisations'],
-            ['/en/equipe', 'en', 'The team | EVENTIA BY N.J', 'https://eventianj.com/en/equipe'],
-            ['/en/recrutement', 'en', 'Careers | EVENTIA BY N.J', 'https://eventianj.com/en/recrutement'],
-            ['/en/contact', 'en', 'Contact | EVENTIA BY N.J', 'https://eventianj.com/en/contact'],
-            ['/en/mentions-legales', 'en', 'Legal notice | EVENTIA BY N.J', 'https://eventianj.com/en/mentions-legales'],
+            ['/', 'fr', 'EVENTIA SARL — Nous créons ce qui vous distingue', 'https://eventianj.com'],
+            ['/expertises/image-personal-branding', 'fr', 'EVENTIA IMAGE &amp; PERSONAL BRANDING | EVENTIA SARL', 'https://eventianj.com/expertises/image-personal-branding'],
+            ['/expertises/hotesses', 'fr', 'EVENTIA HÔTESSES | EVENTIA SARL', 'https://eventianj.com/expertises/hotesses'],
+            ['/expertises/events', 'fr', 'EVENTIA EVENTS | EVENTIA SARL', 'https://eventianj.com/expertises/events'],
+            ['/agence', 'fr', 'L’agence | EVENTIA SARL', 'https://eventianj.com/agence'],
+            ['/recrutement', 'fr', 'Recrutement | EVENTIA SARL', 'https://eventianj.com/recrutement'],
+            ['/contact', 'fr', 'Contact et demande de devis | EVENTIA SARL', 'https://eventianj.com/contact'],
+            ['/mentions-legales', 'fr', 'Mentions légales | EVENTIA SARL', 'https://eventianj.com/mentions-legales'],
+            ['/en', 'en', 'EVENTIA SARL — We create what sets you apart', 'https://eventianj.com/en'],
+            ['/en/expertises/image-personal-branding', 'en', 'EVENTIA IMAGE &amp; PERSONAL BRANDING | EVENTIA SARL', 'https://eventianj.com/en/expertises/image-personal-branding'],
+            ['/en/expertises/hotesses', 'en', 'EVENTIA HÔTESSES | EVENTIA SARL', 'https://eventianj.com/en/expertises/hotesses'],
+            ['/en/expertises/events', 'en', 'EVENTIA EVENTS | EVENTIA SARL', 'https://eventianj.com/en/expertises/events'],
+            ['/en/agence', 'en', 'The agency | EVENTIA SARL', 'https://eventianj.com/en/agence'],
+            ['/en/recrutement', 'en', 'Careers | EVENTIA SARL', 'https://eventianj.com/en/recrutement'],
+            ['/en/contact', 'en', 'Contact and quote request | EVENTIA SARL', 'https://eventianj.com/en/contact'],
+            ['/en/mentions-legales', 'en', 'Legal notice | EVENTIA SARL', 'https://eventianj.com/en/mentions-legales'],
         ];
     }
 
@@ -35,15 +37,63 @@ class PagesTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('<html lang="'.$locale.'"', false);
-        $response->assertSee('<title>'.e($title).'</title>', false);
+        $response->assertSee('<title>'.$title.'</title>', false);
         $response->assertSee('<link rel="canonical" href="'.$canonical.'">', false);
         $response->assertSee('id="contenu"', false);
+    }
+
+    public static function redirects(): array
+    {
+        return [
+            ['/expertises', '/#expertise'],
+            ['/realisations', '/expertises/hotesses'],
+            ['/equipe', '/agence'],
+            ['/en/expertises', '/en#expertise'],
+            ['/en/realisations', '/en/expertises/hotesses'],
+            ['/en/equipe', '/en/agence'],
+        ];
+    }
+
+    #[DataProvider('redirects')]
+    public function test_former_urls_redirect_permanently(string $from, string $to): void
+    {
+        $this->get($from)->assertStatus(301)->assertRedirect($to);
+    }
+
+    public function test_navigation_offers_the_three_divisions(): void
+    {
+        $this->get('/')
+            ->assertSee('id="sous-menu-expertises"', false)
+            ->assertSeeInOrder(['EVENTIA IMAGE &amp; PERSONAL BRANDING', 'EVENTIA HÔTESSES', 'EVENTIA EVENTS'], false)
+            ->assertSee('href="/expertises/hotesses"', false);
+    }
+
+    public function test_official_contact_details(): void
+    {
+        $this->get('/contact')
+            ->assertSee('Bastos, Yaoundé – Cameroun')
+            ->assertSee('tel:+237692237387', false)
+            ->assertSee('tel:+237675423265', false)
+            ->assertSee('mailto:contact@eventianj.com', false)
+            ->assertSee('https://wa.me/237692237387', false)
+            ->assertDontSee('656', false)
+            ->assertDontSee('BY N.J');
+    }
+
+    public function test_official_titles_and_signatures(): void
+    {
+        $this->get('/')->assertSee('EVENTIA SARL')->assertSee('Pourquoi EVENTIA ?');
+        $this->get('/expertises/image-personal-branding')->assertSee('Faites de votre image une force.')->assertSee('Votre image. Votre influence. Votre empreinte.');
+        $this->get('/expertises/hotesses')->assertSee('Le premier contact donne le ton.')->assertSee('L’élégance de l’accueil. La puissance de l’image.')->assertSee('Miss Cameroun 2026');
+        $this->get('/expertises/events')->assertSee('Vos idées prennent vie. Chaque détail compte.')->assertSee('Le prestige en scène.');
+        $this->get('/agence')->assertSee('Une agence, trois expertises complémentaires.')->assertSee('Noura Njikam');
+        $this->get('/recrutement')->assertSee('Rejoignez les équipes EVENTIA.');
+        $this->get('/contact')->assertSee('Envoyer ma demande');
     }
 
     public function test_only_the_legal_notice_is_not_indexed(): void
     {
         $this->get('/mentions-legales')->assertSee('<meta name="robots" content="noindex">', false);
-        $this->get('/en/mentions-legales')->assertSee('<meta name="robots" content="noindex">', false);
         $this->get('/')->assertDontSee('name="robots"', false);
     }
 
@@ -53,18 +103,8 @@ class PagesTest extends TestCase
         $this->get('/en/contact')->assertDontSee('location.replace("/en"', false);
     }
 
-    public function test_contact_and_recruitment_addresses(): void
+    public function test_unknown_url_returns_404(): void
     {
-        $this->get('/contact')->assertSee('mailto:contact@eventianj.com', false);
-        $this->get('/recrutement')
-            ->assertSee('mailto:candidature@eventianj.com?subject=Candidature%20%E2%80%94%20EVENTIA', false)
-            ->assertSee('candidature@eventianj.com</a>', false);
-    }
-
-    public function test_unknown_url_returns_the_next_js_style_404(): void
-    {
-        $this->get('/nexiste-pas')
-            ->assertNotFound()
-            ->assertSee('This page could not be found.');
+        $this->get('/nexiste-pas')->assertNotFound()->assertSee('This page could not be found.');
     }
 }

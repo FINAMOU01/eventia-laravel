@@ -3,8 +3,10 @@
 namespace App\Support;
 
 /**
- * Port of lib/content.ts (French, client-approved wording) and lib/content-en.ts (faithful English translation).
- * Expertise titles/descriptions and method steps are the client's exact wording.
+ * Official EVENTIA SARL content (client specification), French reference and English translation.
+ *
+ * A `null` value marks content the client has not provided yet: views then display a visible
+ * "content to be provided" box instead of inventing text. Fill these values in to publish the content.
  */
 final class Content
 {
@@ -15,133 +17,106 @@ final class Content
         return self::$cache[$locale] ??= $locale === 'en' ? self::en() : self::fr();
     }
 
+    /** Dotted keys of every value still awaiting client content, e.g. "poles.0.description". */
+    public static function pending(string $locale = 'fr'): array
+    {
+        $pending = [];
+        $walk = function (array $data, string $prefix) use (&$walk, &$pending) {
+            foreach ($data as $key => $value) {
+                $path = $prefix === '' ? (string) $key : "{$prefix}.{$key}";
+                if ($value === null) {
+                    $pending[] = $path;
+                } elseif (is_array($value)) {
+                    $walk($value, $path);
+                }
+            }
+        };
+        $walk(self::get($locale), '');
+
+        return $pending;
+    }
+
+    public static function pole(string $id, string $locale): array
+    {
+        return collect(self::get($locale)['poles'])->firstWhere('id', $id);
+    }
+
     private static function fr(): array
     {
-        $documents = ['CV', 'Lettre de motivation', 'Photo portrait récente', 'Photo récente en pied, sans filtre'];
-
         return [
-            'expertises' => [
+            'home' => [
+                'eyebrow' => 'EVENTIA SARL',
+                'title' => 'Nous créons ce qui vous distingue.',
+                'text' => 'Image, accueil et événementiel : trois expertises complémentaires pour valoriser votre identité, soigner l’expérience de vos publics et donner vie à vos projets.',
+                'polesEyebrow' => 'Nos expertises',
+                'whyTitle' => 'Pourquoi EVENTIA ?',
+                // Four commitments communicated by the client.
+                'why' => null,
+            ],
+            'poles' => [
                 [
-                    'id' => 'accueil-representation',
+                    'id' => 'image',
                     'number' => '01',
-                    'title' => 'Accueil & représentation',
-                    'tagline' => 'Créer un premier contact qui valorise votre image.',
-                    'description' => "Premier contact, première impression\u{00A0}: valoriser votre image auprès de vos publics.",
-                    'group' => 'coeur',
-                    'slot' => 'expertise-accueil',
-                ],
-                [
-                    'id' => 'protocole-accompagnement',
-                    'number' => '02',
-                    'title' => 'Protocole & accompagnement',
-                    'tagline' => 'Accueillir et accompagner vos invités avec attention.',
-                    'description' => 'Accueillir et accompagner vos invités avec attention et professionnalisme.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-protocole',
-                ],
-                [
-                    'id' => 'organisation-evenementielle',
-                    'number' => '03',
-                    'title' => 'Organisation événementielle',
-                    'tagline' => 'Concevoir et coordonner vos événements avec précision.',
-                    'description' => 'Des équipes mobilisées pour contribuer au bon déroulement de vos événements.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-organisation',
-                ],
-                [
-                    'id' => 'activation-produits-marques',
-                    'number' => '04',
-                    'title' => 'Activation de produits & de marques',
-                    'tagline' => 'Créer l’interaction entre votre marque et votre public.',
-                    'description' => 'Créer une interaction forte entre votre marque, vos produits et votre public.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-activation',
-                ],
-                [
-                    'id' => 'personnel-sur-mesure',
-                    'number' => '05',
-                    'title' => 'Personnel événementiel sur mesure',
-                    'tagline' => 'Des équipes adaptées aux besoins de chaque événement.',
-                    'description' => 'Des équipes adaptées à vos besoins, à votre événement et à votre image.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-personnel',
-                ],
-                [
-                    'id' => 'wedding-planning',
-                    'number' => '06',
-                    'title' => 'Wedding Planning',
-                    'tagline' => 'Imaginer et orchestrer des célébrations qui vous ressemblent.',
-                    'description' => 'Imaginer et orchestrer des célébrations qui vous ressemblent.',
-                    'group' => 'elargie',
-                    'slot' => 'expertise-wedding',
-                ],
-                [
-                    'id' => 'decoration-evenementielle',
-                    'number' => '07',
-                    'title' => 'Décoration événementielle',
-                    'tagline' => 'Créer des univers élégants, cohérents et mémorables.',
-                    'description' => 'Créer des univers élégants, cohérents et mémorables.',
-                    'group' => 'elargie',
-                    'slot' => 'expertise-decoration',
-                ],
-                [
-                    'id' => 'restauration-evenementielle',
-                    'number' => '08',
-                    'title' => 'Restauration événementielle',
-                    'tagline' => 'Proposer une expérience culinaire adaptée à chaque occasion.',
-                    'description' => 'Proposer une expérience culinaire adaptée à chaque occasion.',
-                    'group' => 'elargie',
-                    'slot' => 'expertise-restauration',
-                ],
-                [
-                    'id' => 'gestion-image',
-                    'number' => '09',
-                    'title' => 'Gestion d’image',
-                    'tagline' => 'Soigner votre présence, votre image et celle de votre événement.',
-                    'description' => 'Soigner votre présence, votre image et celle de votre événement.',
-                    'group' => 'elargie',
+                    'name' => 'EVENTIA IMAGE & PERSONAL BRANDING',
+                    'signature' => 'Votre image. Votre influence. Votre empreinte.',
+                    'title' => 'Faites de votre image une force.',
+                    'description' => null,
                     'slot' => 'expertise-image',
-                ],
-            ],
-            'method' => [
-                ['verb' => 'Comprendre', 'text' => 'Identifier les besoins de votre événement.'],
-                ['verb' => 'Constituer', 'text' => 'Constituer une équipe adaptée à la mission.'],
-                ['verb' => 'Préparer', 'text' => 'Briefing et préparation des équipes.'],
-                ['verb' => 'Accompagner', 'text' => 'Être présent sur le terrain et contribuer à la qualité de l’expérience.'],
-            ],
-            'realisationsIntro' => [
-                'title' => 'Des événements. Des visages. Des expériences.',
-                'intro' => 'EVENTIA en action à travers des événements qui nous ont fait confiance.',
-                'category' => 'Événements premium',
-                'context' => 'Partenaire du COMICA, EVENTIA a accompagné ces étapes avec ses équipes, contribuant à l’accueil, à l’accompagnement et à l’image de l’événement.',
-            ],
-            'realisations' => [
-                [
-                    'id' => 'littoral-sud-ouest-2026',
-                    'number' => '01',
-                    'type' => 'Concours régional',
-                    'title' => 'Littoral & Sud-Ouest 2026',
-                    'slots' => ['realisation-littoral-main', 'realisation-littoral-detail'],
+                    'gallery' => [],
+                    'sections' => [
+                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'list', 'items' => null],
+                        ['id' => 'approche', 'eyebrow' => 'Notre approche', 'layout' => 'steps', 'items' => null],
+                    ],
                 ],
                 [
-                    'id' => 'miss-cameroun-2026',
+                    'id' => 'hotesses',
                     'number' => '02',
-                    'type' => 'Finale nationale',
-                    'title' => 'Miss Cameroun 2026',
-                    'slots' => ['realisation-miss-main', 'realisation-miss-side', 'realisation-miss-detail', 'realisation-miss-extra'],
+                    'name' => 'EVENTIA HÔTESSES',
+                    'signature' => 'L’élégance de l’accueil. La puissance de l’image.',
+                    'title' => 'Le premier contact donne le ton.',
+                    'description' => null,
+                    'slot' => 'expertise-accueil',
+                    'gallery' => ['expertise-protocole', 'expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
+                    'sections' => [
+                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'list', 'items' => null],
+                        ['id' => 'terrains', 'eyebrow' => 'Terrains d’intervention', 'layout' => 'grid', 'items' => null],
+                    ],
+                    // Real assignments: Miss Cameroun 2026 (photos moved from the former Réalisations page).
+                    'missions' => [
+                        'eyebrow' => 'Nos missions',
+                        'category' => 'Événements premium',
+                        'context' => 'Partenaire du COMICA, EVENTIA a accompagné ces étapes avec ses équipes, contribuant à l’accueil, à l’accompagnement et à l’image de l’événement.',
+                        'type' => 'Finale nationale',
+                        'title' => 'Miss Cameroun 2026',
+                        'slots' => ['realisation-miss-main', 'realisation-miss-side', 'realisation-miss-detail', 'realisation-miss-extra'],
+                        'poster' => 'realisation-comica',
+                    ],
+                ],
+                [
+                    'id' => 'events',
+                    'number' => '03',
+                    'name' => 'EVENTIA EVENTS',
+                    'signature' => 'Le prestige en scène.',
+                    'title' => 'Vos idées prennent vie. Chaque détail compte.',
+                    'description' => null,
+                    'slot' => 'expertise-organisation',
+                    'gallery' => ['expertise-decoration', 'expertise-wedding', 'expertise-restauration'],
+                    'sections' => [
+                        ['id' => 'evenements', 'eyebrow' => 'Types d’événements', 'layout' => 'grid', 'items' => null],
+                        ['id' => 'expertises', 'eyebrow' => 'Nos expertises', 'layout' => 'list', 'items' => null],
+                    ],
                 ],
             ],
-            'eventiaSpot' => [
-                'kind' => 'file',
-                'src' => '/media/hero/hero.mp4',
-                'orientation' => 'landscape',
-                'title' => 'Le spot EVENTIA',
+            'agency' => [
+                'title' => 'Une agence, trois expertises complémentaires.',
+                'presentation' => null,
+                'mission' => null,
+                'signature' => null,
+                // Five commitments.
+                'commitments' => null,
             ],
-            'teamValues' => ['Élégance', 'Professionnalisme', 'Dynamisme', 'Engagement'],
-            // Client-approved wording only.
+            // Kept at the client's request on the agency page (previously validated wording).
             'team' => [
-                'headline' => ['Une vision.', 'Une équipe.', 'Une ambition.'],
-                'summary' => 'EVENTIA réunit des équipes préparées, briefées et engagées autour d’une même exigence : faire de chaque événement une expérience professionnelle, élégante et mémorable.',
                 'quote' => 'L’accueil est le premier reflet de votre image.',
                 'leader' => [
                     'name' => 'Noura Njikam',
@@ -150,177 +125,100 @@ final class Content
                 ],
                 'agency' => 'EVENTIA est une agence spécialisée dans l’accueil, la représentation, l’animation et l’accompagnement événementiel. Elle met à disposition des équipes préparées, dynamiques et engagées pour accompagner entreprises, institutions et organisateurs.',
                 'ambition' => 'Faire de chaque rencontre avec votre public une expérience qui vous ressemble.',
-                'crew' => 'Autour de Noura Njikam, une équipe préparée, briefée et engagée, présente sur le terrain pour représenter votre image.',
             ],
-            // Client-approved wording only; do not add criteria the client has not provided.
             'recruitment' => [
-                'title' => 'Rejoignez l’équipe EVENTIA',
-                'tagline' => 'Des profils. Des personnalités. Une même exigence.',
-                'intro' => 'EVENTIA recherche des profils dynamiques, élégants et professionnels, capables de représenter une marque et d’offrir une expérience irréprochable au public.',
-                'pageIntro' => 'Nous recherchons des personnalités capables d’incarner l’élégance, le professionnalisme et l’énergie EVENTIA.',
-                'note' => 'Les candidatures sont étudiées selon les besoins et les missions.',
-                'closing' => 'Votre image commence par les personnes qui vous représentent.',
-                'previewProfiles' => [
-                    'Hôtesses événementielles',
-                    'Profils bilingues français / anglais',
-                    'Profils dynamiques et souriants',
-                    'Excellente présentation',
-                    'Très bon relationnel',
-                ],
-                'profiles' => [
-                    'Hôtesses événementielles',
-                    'Profils bilingues français / anglais',
-                    'Personnes dynamiques et souriantes',
-                    'Excellent relationnel',
-                    'Bonne présentation',
-                ],
-                'criteria' => [
-                    ['label' => 'Taille minimale', 'value' => '1,70 m'],
-                    ['label' => 'Âge', 'value' => '19–30 ans'],
-                    ['value' => 'Français / Anglais'],
-                    ['value' => 'Dynamisme et ponctualité'],
-                    ['value' => 'Bonne présentation'],
-                    ['value' => 'Bon relationnel'],
-                ],
-                'documents' => $documents,
+                'title' => 'Rejoignez les équipes EVENTIA.',
+                'profiles' => null,
+                // Choice list for "Type de mission recherché"; a free-text field is shown until the client provides it.
+                'missionTypes' => null,
             ],
-            // Pre-filled application e-mail listing the requested documents.
-            'applicationHref' => Site::mailtoHref(
-                'Candidature — EVENTIA',
-                "Bonjour,\n\nJe souhaite rejoindre l’équipe EVENTIA. Vous trouverez ci-joint :\n"
-                    .implode("\n", array_map(fn ($document) => "- {$document}", $documents))
-                    ."\n\nCordialement,\n",
-                Site::CONTACT['recruitmentEmail'],
-            ),
+            'contact' => [
+                'title' => 'Parlons de votre projet.',
+                // Choice list for "Type de prestation"; a free-text field is shown until the client provides it.
+                'serviceTypes' => null,
+            ],
+            // DRAFT to be validated by the client (no retention period invented).
+            'privacy' => [
+                'validated' => false,
+                'quote' => 'Les informations transmises via ce formulaire sont utilisées uniquement par EVENTIA SARL pour étudier votre demande et vous recontacter. Elles ne sont ni vendues ni transmises à des tiers. Pour consulter, modifier ou supprimer vos données, écrivez à contact@eventianj.com.',
+                'application' => 'Les informations et le CV transmis via ce formulaire sont utilisés uniquement par EVENTIA SARL pour étudier votre candidature et vous recontacter. Ils ne sont ni vendus ni transmis à des tiers. Pour consulter, modifier ou supprimer vos données, écrivez à candidature@eventianj.com.',
+            ],
         ];
     }
 
+    // English translation of the official French content (to be validated by the client).
     private static function en(): array
     {
-        $documents = ['CV', 'Cover letter', 'Recent portrait photo', 'Recent full-length photo, unfiltered'];
-
         return [
-            'expertises' => [
+            'home' => [
+                'eyebrow' => 'EVENTIA SARL',
+                'title' => 'We create what sets you apart.',
+                'text' => 'Image, hospitality and events: three complementary areas of expertise to enhance your identity, care for your audiences’ experience and bring your projects to life.',
+                'polesEyebrow' => 'Our expertise',
+                'whyTitle' => 'Why EVENTIA?',
+                'why' => null,
+            ],
+            'poles' => [
                 [
-                    'id' => 'accueil-representation',
+                    'id' => 'image',
                     'number' => '01',
-                    'title' => 'Reception & representation',
-                    'tagline' => 'Creating a first contact that enhances your image.',
-                    'description' => 'First contact, first impression: showcasing your image to your audiences.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-accueil',
-                ],
-                [
-                    'id' => 'protocole-accompagnement',
-                    'number' => '02',
-                    'title' => 'Protocol & guest assistance',
-                    'tagline' => 'Welcoming and accompanying your guests with care.',
-                    'description' => 'Welcoming and accompanying your guests with attention and professionalism.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-protocole',
-                ],
-                [
-                    'id' => 'organisation-evenementielle',
-                    'number' => '03',
-                    'title' => 'Event organisation',
-                    'tagline' => 'Planning and coordinating your events with precision.',
-                    'description' => 'Teams mobilised to help your events run smoothly.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-organisation',
-                ],
-                [
-                    'id' => 'activation-produits-marques',
-                    'number' => '04',
-                    'title' => 'Product & brand activation',
-                    'tagline' => 'Creating interaction between your brand and your audience.',
-                    'description' => 'Creating strong interaction between your brand, your products and your audience.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-activation',
-                ],
-                [
-                    'id' => 'personnel-sur-mesure',
-                    'number' => '05',
-                    'title' => 'Tailored event staff',
-                    'tagline' => 'Teams adapted to the needs of every event.',
-                    'description' => 'Teams adapted to your needs, your event and your image.',
-                    'group' => 'coeur',
-                    'slot' => 'expertise-personnel',
-                ],
-                [
-                    'id' => 'wedding-planning',
-                    'number' => '06',
-                    'title' => 'Wedding Planning',
-                    'tagline' => 'Imagining and orchestrating celebrations that reflect who you are.',
-                    'description' => 'Imagining and orchestrating celebrations that reflect who you are.',
-                    'group' => 'elargie',
-                    'slot' => 'expertise-wedding',
-                ],
-                [
-                    'id' => 'decoration-evenementielle',
-                    'number' => '07',
-                    'title' => 'Event decoration',
-                    'tagline' => 'Creating elegant, coherent and memorable settings.',
-                    'description' => 'Creating elegant, coherent and memorable settings.',
-                    'group' => 'elargie',
-                    'slot' => 'expertise-decoration',
-                ],
-                [
-                    'id' => 'restauration-evenementielle',
-                    'number' => '08',
-                    'title' => 'Event catering',
-                    'tagline' => 'Offering a culinary experience suited to every occasion.',
-                    'description' => 'Offering a culinary experience suited to every occasion.',
-                    'group' => 'elargie',
-                    'slot' => 'expertise-restauration',
-                ],
-                [
-                    'id' => 'gestion-image',
-                    'number' => '09',
-                    'title' => 'Image management',
-                    'tagline' => 'Taking care of your presence, your image and that of your event.',
-                    'description' => 'Taking care of your presence, your image and that of your event.',
-                    'group' => 'elargie',
+                    'name' => 'EVENTIA IMAGE & PERSONAL BRANDING',
+                    'signature' => 'Your image. Your influence. Your mark.',
+                    'title' => 'Make your image a strength.',
+                    'description' => null,
                     'slot' => 'expertise-image',
-                ],
-            ],
-            'method' => [
-                ['verb' => 'Understand', 'text' => 'Identify the needs of your event.'],
-                ['verb' => 'Assemble', 'text' => 'Build a team suited to the assignment.'],
-                ['verb' => 'Prepare', 'text' => 'Briefing and preparation of the teams.'],
-                ['verb' => 'Support', 'text' => 'Be present on site and contribute to the quality of the experience.'],
-            ],
-            'realisationsIntro' => [
-                'title' => 'Events. Faces. Experiences.',
-                'intro' => 'EVENTIA in action at events that placed their trust in us.',
-                'category' => 'Premium events',
-                'context' => 'As a partner of COMICA, EVENTIA supported these stages with its teams, contributing to the welcome, the guest assistance and the image of the event.',
-            ],
-            'realisations' => [
-                [
-                    'id' => 'littoral-sud-ouest-2026',
-                    'number' => '01',
-                    'type' => 'Regional pageant',
-                    'title' => 'Littoral & South-West 2026',
-                    'slots' => ['realisation-littoral-main', 'realisation-littoral-detail'],
+                    'gallery' => [],
+                    'sections' => [
+                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'list', 'items' => null],
+                        ['id' => 'approche', 'eyebrow' => 'Our approach', 'layout' => 'steps', 'items' => null],
+                    ],
                 ],
                 [
-                    'id' => 'miss-cameroun-2026',
+                    'id' => 'hotesses',
                     'number' => '02',
-                    'type' => 'National final',
-                    'title' => 'Miss Cameroun 2026',
-                    'slots' => ['realisation-miss-main', 'realisation-miss-side', 'realisation-miss-detail', 'realisation-miss-extra'],
+                    'name' => 'EVENTIA HÔTESSES',
+                    'signature' => 'The elegance of hospitality. The power of image.',
+                    'title' => 'The first contact sets the tone.',
+                    'description' => null,
+                    'slot' => 'expertise-accueil',
+                    'gallery' => ['expertise-protocole', 'expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
+                    'sections' => [
+                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'list', 'items' => null],
+                        ['id' => 'terrains', 'eyebrow' => 'Where we operate', 'layout' => 'grid', 'items' => null],
+                    ],
+                    'missions' => [
+                        'eyebrow' => 'Our assignments',
+                        'category' => 'Premium events',
+                        'context' => 'As a partner of COMICA, EVENTIA supported these stages with its teams, contributing to the welcome, the guest assistance and the image of the event.',
+                        'type' => 'National final',
+                        'title' => 'Miss Cameroun 2026',
+                        'slots' => ['realisation-miss-main', 'realisation-miss-side', 'realisation-miss-detail', 'realisation-miss-extra'],
+                        'poster' => 'realisation-comica',
+                    ],
+                ],
+                [
+                    'id' => 'events',
+                    'number' => '03',
+                    'name' => 'EVENTIA EVENTS',
+                    'signature' => 'Prestige on stage.',
+                    'title' => 'Your ideas come to life. Every detail matters.',
+                    'description' => null,
+                    'slot' => 'expertise-organisation',
+                    'gallery' => ['expertise-decoration', 'expertise-wedding', 'expertise-restauration'],
+                    'sections' => [
+                        ['id' => 'evenements', 'eyebrow' => 'Types of events', 'layout' => 'grid', 'items' => null],
+                        ['id' => 'expertises', 'eyebrow' => 'Our expertise', 'layout' => 'list', 'items' => null],
+                    ],
                 ],
             ],
-            'eventiaSpot' => [
-                'kind' => 'file',
-                'src' => '/media/hero/hero.mp4',
-                'orientation' => 'landscape',
-                'title' => 'The EVENTIA film',
+            'agency' => [
+                'title' => 'One agency, three complementary areas of expertise.',
+                'presentation' => null,
+                'mission' => null,
+                'signature' => null,
+                'commitments' => null,
             ],
-            'teamValues' => ['Elegance', 'Professionalism', 'Energy', 'Commitment'],
             'team' => [
-                'headline' => ['One vision.', 'One team.', 'One ambition.'],
-                'summary' => 'EVENTIA brings together prepared, briefed and committed teams around one shared standard: making every event a professional, elegant and memorable experience.',
                 'quote' => 'Hospitality is the first reflection of your image.',
                 'leader' => [
                     'name' => 'Noura Njikam',
@@ -329,46 +227,21 @@ final class Content
                 ],
                 'agency' => 'EVENTIA is an agency specialising in hospitality, representation, event animation and event support. It provides prepared, dynamic and committed teams to support companies, institutions and organisers.',
                 'ambition' => 'Making every encounter with your audience an experience that reflects who you are.',
-                'crew' => 'Around Noura Njikam, a prepared, briefed and committed team, present on site to represent your image.',
             ],
             'recruitment' => [
-                'title' => 'Join the EVENTIA team',
-                'tagline' => 'Profiles. Personalities. One shared standard.',
-                'intro' => 'EVENTIA is looking for dynamic, elegant and professional profiles, able to represent a brand and offer the public a flawless experience.',
-                'pageIntro' => 'We are looking for personalities able to embody the elegance, professionalism and energy of EVENTIA.',
-                'note' => 'Applications are reviewed according to needs and assignments.',
-                'closing' => 'Your image starts with the people who represent you.',
-                'previewProfiles' => [
-                    'Event hostesses',
-                    'Bilingual French / English profiles',
-                    'Dynamic, smiling profiles',
-                    'Excellent presentation',
-                    'Very good interpersonal skills',
-                ],
-                'profiles' => [
-                    'Event hostesses',
-                    'Bilingual French / English profiles',
-                    'Dynamic, smiling people',
-                    'Excellent interpersonal skills',
-                    'Good presentation',
-                ],
-                'criteria' => [
-                    ['label' => 'Minimum height', 'value' => '1.70 m'],
-                    ['label' => 'Age', 'value' => '19–30 years'],
-                    ['value' => 'French / English'],
-                    ['value' => 'Energy and punctuality'],
-                    ['value' => 'Good presentation'],
-                    ['value' => 'Good interpersonal skills'],
-                ],
-                'documents' => $documents,
+                'title' => 'Join the EVENTIA teams.',
+                'profiles' => null,
+                'missionTypes' => null,
             ],
-            'applicationHref' => Site::mailtoHref(
-                'Application — EVENTIA',
-                "Hello,\n\nI would like to join the EVENTIA team. Please find attached:\n"
-                    .implode("\n", array_map(fn ($document) => "- {$document}", $documents))
-                    ."\n\nKind regards,\n",
-                Site::CONTACT['recruitmentEmail'],
-            ),
+            'contact' => [
+                'title' => 'Let’s talk about your project.',
+                'serviceTypes' => null,
+            ],
+            'privacy' => [
+                'validated' => false,
+                'quote' => 'The information sent through this form is used only by EVENTIA SARL to review your request and get back to you. It is neither sold nor shared with third parties. To access, correct or delete your data, write to contact@eventianj.com.',
+                'application' => 'The information and CV sent through this form are used only by EVENTIA SARL to review your application and get back to you. They are neither sold nor shared with third parties. To access, correct or delete your data, write to candidature@eventianj.com.',
+            ],
         ];
     }
 }

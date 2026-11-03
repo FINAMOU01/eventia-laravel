@@ -1,8 +1,7 @@
 import Alpine from 'alpinejs';
 import siteHeader from './modules/header';
 import expertiseSlider from './modules/expertise-slider';
-import realisationsCarousel from './modules/realisations-carousel';
-import quoteForm from './modules/quote-form';
+import ajaxForm from './modules/ajax-form';
 import { lazyVideo, videoLightbox } from './modules/video';
 import { initReveals } from './modules/motion';
 
@@ -10,8 +9,7 @@ const LOCALE_STORAGE_KEY = 'eventia-locale';
 
 Alpine.data('siteHeader', siteHeader);
 Alpine.data('expertiseSlider', expertiseSlider);
-Alpine.data('realisationsCarousel', realisationsCarousel);
-Alpine.data('quoteForm', quoteForm);
+Alpine.data('ajaxForm', ajaxForm);
 Alpine.data('lazyVideo', lazyVideo);
 Alpine.data('videoLightbox', videoLightbox);
 

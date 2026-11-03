@@ -1,0 +1,5 @@
+﻿Déposer ici les 3 logos officiels des pôles (SVG ou PNG transparent) :
+  image.svg|png     -> EVENTIA IMAGE & PERSONAL BRANDING
+  hotesses.svg|png  -> EVENTIA HÔTESSES
+  events.svg|png    -> EVENTIA EVENTS
+Ne pas recolorer ni redimensionner les fichiers.
