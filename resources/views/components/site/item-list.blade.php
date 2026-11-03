@@ -25,11 +25,16 @@
     @endforeach
   </x-ui.reveal-group>
 @elseif ($layout === 'inline')
-  {{-- Single elegant sentence separated by gold dots (field contexts, event types). --}}
-  <x-ui.reveal-group as="ul" :stagger="0.07" class="flex flex-wrap items-center justify-center gap-x-9 gap-y-4 font-display text-[clamp(1.5rem,1.1rem+1.6vw,2.5rem)] leading-[1.3] text-fg">
+  {{-- Short words: one centred sentence; longer phrases (event types): a 3-column grid, same dots and typeface. --}}
+  @php $long = max(array_map(fn ($item) => mb_strlen($normalize($item)['title']), $items)) > 30; @endphp
+  <x-ui.reveal-group as="ul" :stagger="0.07" @class([
+      'font-display leading-[1.3] text-fg',
+      'flex flex-wrap items-center justify-center gap-x-9 gap-y-4 text-[clamp(1.5rem,1.1rem+1.6vw,2.5rem)]' => ! $long,
+      'grid gap-x-10 gap-y-6 text-[clamp(1.25rem,1.05rem+0.8vw,1.75rem)] sm:grid-cols-2 lg:grid-cols-3' => $long,
+  ])>
     @foreach (array_map($normalize, $items) as $item)
-      <x-ui.reveal-item as="li" class="flex items-center gap-3.5">
-        <span aria-hidden="true" class="size-1.5 shrink-0 translate-y-[0.15em] rounded-full bg-accent"></span>
+      <x-ui.reveal-item as="li" @class(['flex gap-3.5', 'items-center' => ! $long, 'items-baseline' => $long])>
+        <span aria-hidden="true" @class(['size-1.5 shrink-0 rounded-full bg-accent', 'translate-y-[0.15em]' => ! $long, '-translate-y-[0.2em]' => $long])></span>
         <span>{{ $item['title'] }}</span>
       </x-ui.reveal-item>
     @endforeach

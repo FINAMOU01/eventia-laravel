@@ -117,7 +117,14 @@ class PagesTest extends TestCase
             ->assertSee('Réserver une équipe d’accueil')
             ->assertDontSee('Contenu à fournir par le client');
         $this->get('/contact?pole=hotesses')->assertSee('<option value="hotesses" selected', false);
-        $this->get('/expertises/events')->assertSee('Vos idées prennent vie. Chaque détail compte.')->assertSee('Le prestige en scène.');
+        $this->get('/expertises/events')->assertSee('Vos idées prennent vie. Chaque détail compte.')->assertSee('Le prestige en scène.')
+            ->assertSeeInOrder([
+                'Nos événements', 'Événements corporate et institutionnels', 'Conférences, séminaires et cérémonies', 'Événements culturels et artistiques',
+                'Lancements de produits et activations de marque', 'Mariages et célébrations privées', 'Événements éducatifs et communautaires',
+                'Nos expertises', 'Concept, planification et coordination', 'Décoration et scénographie', 'son, lumière et scène',
+                'Logistique, restauration et prestataires', 'Communication événementielle',
+            ])
+            ->assertDontSee('Contenu à fournir par le client');
         $this->get('/agence')->assertSee('Une agence, trois expertises complémentaires.')->assertSee('Noura Njikam');
         $this->get('/recrutement')
             ->assertSee('Rejoignez l’équipe <em class="text-accent italic">EVENTIA</em>', false)
