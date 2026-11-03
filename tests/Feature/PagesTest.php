@@ -107,7 +107,16 @@ class PagesTest extends TestCase
             ])
             ->assertDontSee('Contenu à fournir par le client')
             ->assertDontSee('aria-label="Le pôle en images"', false);
-        $this->get('/expertises/hotesses')->assertSee('Le premier contact donne le ton.')->assertSee('L’élégance de l’accueil. La puissance de l’image.')->assertSee('Miss Cameroun 2026');
+        $this->get('/expertises/hotesses')->assertSee('Le premier contact donne le ton.')->assertSee('L’élégance de l’accueil. La puissance de l’image.')->assertSee('Miss Cameroun 2026')
+            ->assertSeeInOrder([
+                'Nos services', 'Accueil et orientation des invités', 'Accueil VIP/VVIP et protocole', 'Enregistrement, badges et gestion des flux',
+                'Hôtes et hôtesses événementiels', 'Stewards et assistance opérationnelle', 'Hôtesses promotionnelles et activations de marque', 'Briefing et coordination des équipes',
+                'Nos terrains d’intervention', 'Conférences', 'Cérémonies', 'Galas', 'Salons', 'Lancements de produits', 'Activations commerciales', 'Événements institutionnels',
+            ])
+            ->assertSee('href="/contact?pole=hotesses"', false)
+            ->assertSee('Réserver une équipe d’accueil')
+            ->assertDontSee('Contenu à fournir par le client');
+        $this->get('/contact?pole=hotesses')->assertSee('<option value="hotesses" selected', false);
         $this->get('/expertises/events')->assertSee('Vos idées prennent vie. Chaque détail compte.')->assertSee('Le prestige en scène.');
         $this->get('/agence')->assertSee('Une agence, trois expertises complémentaires.')->assertSee('Noura Njikam');
         $this->get('/recrutement')

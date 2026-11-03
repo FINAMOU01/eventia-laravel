@@ -31,6 +31,7 @@
     $side = $photos[1] ?? null;
     $rest = array_slice($photos, 2);
     $tones = ['light', 'surface'];
+    $ctaHref = I18n::localizeHref(Site::PRIMARY_CTA_HREF, $locale).'?pole='.$pole['id'];
 @endphp
 
 @section('content')
@@ -61,6 +62,9 @@
           @else
             <x-site.pending-content :locale="$locale" :label="$t['description']" :compact="true" class="max-w-md" />
           @endif
+          @isset($pole['cta'])
+            <x-ui.link :href="$ctaHref" appearance="primary" size="lg" icon="arrow-right" class="w-full sm:w-auto sm:self-start">{{ $pole['cta'] }}</x-ui.link>
+          @endisset
         </x-ui.reveal-item>
       </x-ui.reveal-group>
     </x-ui.container>
@@ -162,5 +166,5 @@
     </x-ui.reveal-group>
   </x-ui.section>
 
-  <x-site.page-cta :locale="$locale" id="pole-cta-titre" :eyebrow="$t['ctaEyebrow']" />
+  <x-site.page-cta :locale="$locale" id="pole-cta-titre" :eyebrow="$t['ctaEyebrow']" :label="$pole['cta'] ?? null" :href="isset($pole['cta']) ? $ctaHref : null" />
 @endsection

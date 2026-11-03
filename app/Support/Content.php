@@ -105,9 +105,27 @@ final class Content
                     'slot' => 'expertise-accueil',
                     'gallery' => ['expertise-protocole', 'expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
                     'sections' => [
-                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'list', 'items' => null],
-                        ['id' => 'terrains', 'eyebrow' => 'Terrains d’intervention', 'layout' => 'grid', 'items' => null],
+                        ['id' => 'services', 'eyebrow' => 'Nos services', 'layout' => 'list', 'items' => [
+                            'Accueil et orientation des invités',
+                            'Accueil VIP/VVIP et protocole',
+                            'Enregistrement, badges et gestion des flux',
+                            'Hôtes et hôtesses événementiels',
+                            'Stewards et assistance opérationnelle',
+                            'Hôtesses promotionnelles et activations de marque',
+                            'Briefing et coordination des équipes',
+                        ]],
+                        ['id' => 'terrains', 'eyebrow' => 'Nos terrains d’intervention', 'layout' => 'grid', 'items' => [
+                            'Conférences',
+                            'Cérémonies',
+                            'Galas',
+                            'Salons',
+                            'Lancements de produits',
+                            'Activations commerciales',
+                            'Événements institutionnels',
+                        ]],
                     ],
+                    // Division-specific button, opening the quote form with this division pre-selected.
+                    'cta' => 'Réserver une équipe d’accueil',
                     // Real assignments: Miss Cameroun 2026 (photos moved from the former Réalisations page).
                     'missions' => [
                         'eyebrow' => 'Nos missions',
@@ -247,9 +265,26 @@ final class Content
                     'slot' => 'expertise-accueil',
                     'gallery' => ['expertise-protocole', 'expertise-personnel', 'expertise-activation', 'recrutement-portrait'],
                     'sections' => [
-                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'list', 'items' => null],
-                        ['id' => 'terrains', 'eyebrow' => 'Where we operate', 'layout' => 'grid', 'items' => null],
+                        ['id' => 'services', 'eyebrow' => 'Our services', 'layout' => 'list', 'items' => [
+                            'Guest reception and guidance',
+                            'VIP/VVIP reception and protocol',
+                            'Registration, badges and crowd flow management',
+                            'Event hosts and hostesses',
+                            'Stewards and operational support',
+                            'Promotional hostesses and brand activations',
+                            'Team briefing and coordination',
+                        ]],
+                        ['id' => 'terrains', 'eyebrow' => 'Where we operate', 'layout' => 'grid', 'items' => [
+                            'Conferences',
+                            'Ceremonies',
+                            'Galas',
+                            'Trade shows',
+                            'Product launches',
+                            'Commercial activations',
+                            'Institutional events',
+                        ]],
                     ],
+                    'cta' => 'Book a hospitality team',
                     'missions' => [
                         'eyebrow' => 'Our assignments',
                         'category' => 'Premium events',
