@@ -13,7 +13,7 @@
   <x-site.expertise :locale="$locale" />
 
   {{-- Pourquoi EVENTIA ? — four commitments communicated by the client. --}}
-  <x-ui.section id="pourquoi" tone="light" aria-labelledby="pourquoi-titre">
+  <x-ui.section id="pourquoi" tone="light" spacing="none" class="pt-section" aria-labelledby="pourquoi-titre">
     <div class="site-grid gap-y-8">
       <x-ui.reveal class="col-span-full lg:col-span-7">
         <x-ui.eyebrow>EVENTIA SARL</x-ui.eyebrow>
