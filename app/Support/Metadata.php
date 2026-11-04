@@ -14,6 +14,7 @@ final class Metadata
         'events' => '/expertises/events',
         'agence' => '/agence',
         'recrutement' => '/recrutement',
+        'candidature' => '/recrutement/candidature',
         'contact' => '/contact',
         'legal' => '/mentions-legales',
     ];
@@ -48,6 +49,10 @@ final class Metadata
                 'title' => 'Recrutement',
                 'description' => 'Rejoignez les équipes EVENTIA.',
             ],
+            'candidature' => [
+                'title' => 'Candidature',
+                'description' => 'Rejoignez les équipes EVENTIA.',
+            ],
             'contact' => [
                 'title' => 'Contact et demande de devis',
                 'description' => 'Parlons de votre projet. EVENTIA SARL, Bastos, Yaoundé – Cameroun.',
@@ -73,6 +78,10 @@ final class Metadata
             ],
             'recrutement' => [
                 'title' => 'Careers',
+                'description' => 'Join the EVENTIA teams.',
+            ],
+            'candidature' => [
+                'title' => 'Application',
                 'description' => 'Join the EVENTIA teams.',
             ],
             'contact' => [

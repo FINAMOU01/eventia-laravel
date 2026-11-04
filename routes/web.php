@@ -27,7 +27,7 @@ foreach (['fr' => '', 'en' => '/en'] as $locale => $prefix) {
         ->defaults('locale', $locale)
         ->middleware('throttle:5,60')
         ->name("{$locale}.contact.submit");
-    Route::post($prefix.'/recrutement', ApplicationController::class)
+    Route::post($prefix.'/recrutement/candidature', ApplicationController::class)
         ->defaults('locale', $locale)
         ->middleware('throttle:5,60')
         ->name("{$locale}.recrutement.submit");

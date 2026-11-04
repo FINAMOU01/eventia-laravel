@@ -119,7 +119,7 @@ class FormsTest extends TestCase
         Storage::fake('local');
         Mail::fake();
 
-        $this->postJson('/recrutement', $this->application())->assertCreated();
+        $this->postJson('/recrutement/candidature', $this->application())->assertCreated();
 
         $application = JobApplication::sole();
         $this->assertSame(['cv', 'cover_letter', 'photo_portrait', 'photo_full'], array_keys($application->documents));
@@ -138,11 +138,11 @@ class FormsTest extends TestCase
         Storage::fake('local');
         Mail::fake();
 
-        $this->postJson('/recrutement', $this->application(['cv' => UploadedFile::fake()->create('virus.exe', 10)]))
+        $this->postJson('/recrutement/candidature', $this->application(['cv' => UploadedFile::fake()->create('virus.exe', 10)]))
             ->assertStatus(422)->assertJsonValidationErrors(['cv']);
-        $this->postJson('/recrutement', $this->application(['cv' => UploadedFile::fake()->create('cv.pdf', 6000, 'application/pdf')]))
+        $this->postJson('/recrutement/candidature', $this->application(['cv' => UploadedFile::fake()->create('cv.pdf', 6000, 'application/pdf')]))
             ->assertStatus(422)->assertJsonValidationErrors(['cv']);
-        $this->postJson('/recrutement', $this->application(['cv' => null]))
+        $this->postJson('/recrutement/candidature', $this->application(['cv' => null]))
             ->assertStatus(422)->assertJsonValidationErrors(['cv']);
 
         $this->assertSame(0, JobApplication::count());
@@ -153,9 +153,9 @@ class FormsTest extends TestCase
         Storage::fake('local');
         Mail::fake();
 
-        $this->postJson('/recrutement', $this->application(['cover_letter' => null, 'photo_portrait' => null, 'photo_full' => null]))
+        $this->postJson('/recrutement/candidature', $this->application(['cover_letter' => null, 'photo_portrait' => null, 'photo_full' => null]))
             ->assertStatus(422)->assertJsonValidationErrors(['cover_letter', 'photo_portrait', 'photo_full']);
-        $this->postJson('/recrutement', $this->application([
+        $this->postJson('/recrutement/candidature', $this->application([
             'cover_letter' => UploadedFile::fake()->image('lettre.jpg'),
             'photo_portrait' => UploadedFile::fake()->create('portrait.pdf', 100, 'application/pdf'),
             'photo_full' => UploadedFile::fake()->image('pied.jpg')->size(6000),
@@ -170,7 +170,7 @@ class FormsTest extends TestCase
         Storage::fake('local');
         Mail::shouldReceive('to')->andThrow(new RuntimeException('SMTP down'));
 
-        $this->postJson('/recrutement', $this->application())->assertStatus(503)->assertJson(['ok' => false]);
+        $this->postJson('/recrutement/candidature', $this->application())->assertStatus(503)->assertJson(['ok' => false]);
 
         $this->assertNull(JobApplication::sole()->notified_at);
     }

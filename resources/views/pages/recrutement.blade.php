@@ -3,24 +3,22 @@
 @php
     $content = Content::get($locale);
     $recruitment = $content['recruitment'];
-    $applicationHref = Content::applicationHref($locale);
+    $applyHref = I18n::localizeHref(Metadata::PATHS['candidature'], $locale);
     $t = [
         'fr' => [
             'eyebrow' => 'Recrutement',
-            'apply' => 'Postuler',
+            'apply' => 'Rejoignez-nous',
             'profiles' => 'Profils recherchés',
             'criteria' => 'Critères',
             'howTo' => 'Comment postuler',
-            'sendTo' => 'Envoyez votre candidature à',
             'documents' => 'Documents demandés',
         ],
         'en' => [
             'eyebrow' => 'Careers',
-            'apply' => 'Apply',
+            'apply' => 'Join us',
             'profiles' => 'Profiles we are looking for',
             'criteria' => 'Criteria',
             'howTo' => 'How to apply',
-            'sendTo' => 'Send your application to',
             'documents' => 'Documents required',
         ],
     ][$locale];
@@ -50,7 +48,7 @@
           <p class="mt-6 max-w-xl text-lead text-white/85">{{ $recruitment['pageIntro'] }}</p>
         </x-ui.reveal-item>
         <x-ui.reveal-item class="mt-8">
-          <x-ui.link href="#candidature" appearance="primary" size="lg" icon="arrow-right" class="w-full sm:w-auto">{{ $t['apply'] }}</x-ui.link>
+          <x-ui.link :href="$applyHref" appearance="primary" size="lg" icon="arrow-right" class="w-full sm:w-auto">{{ $t['apply'] }}</x-ui.link>
         </x-ui.reveal-item>
       </x-ui.reveal-group>
     </x-ui.container>
@@ -92,19 +90,18 @@
     </div>
   </x-ui.section>
 
-  {{-- How to apply (left) and application form (right) in one section; stacked on mobile. --}}
+  {{-- How to apply: documents to prepare, then the button to the application form (separate page). --}}
   <x-ui.section tone="surface" aria-labelledby="postuler-titre">
-    <div class="site-grid gap-y-14 lg:py-6">
-      <x-ui.reveal class="col-span-full lg:sticky lg:top-[calc(var(--header-height)+2rem)] lg:col-span-5 lg:self-start">
+    <div class="site-grid items-center gap-y-10 lg:py-6">
+      <x-ui.reveal class="col-span-full lg:col-span-5">
         <x-ui.eyebrow>{{ $t['howTo'] }}</x-ui.eyebrow>
-        <h2 id="postuler-titre" class="mt-6 font-display text-[clamp(2rem,1.4rem+2.2vw,3.25rem)] leading-[1.12] tracking-[-0.01em] text-fg">{{ $t['sendTo'] }} <a href="{{ $applicationHref }}" class="mt-3 block text-[clamp(1.25rem,0.95rem+1.1vw,2rem)] text-accent italic underline decoration-1 underline-offset-[0.2em] transition-colors [overflow-wrap:anywhere] hover:text-fg">{{ Site::CONTACT['recruitmentEmail'] }}</a></h2>
-        <div class="mt-10 flex flex-col gap-4">
-          <x-ui.link :href="$applicationHref" appearance="primary" size="lg" icon="arrow-right" class="w-full sm:w-auto sm:self-start">{{ $t['apply'] }}</x-ui.link>
-          <p class="text-small text-fg-muted">{{ $recruitment['note'] }}</p>
-        </div>
+        <h2 id="postuler-titre" class="mt-6 font-display text-[clamp(2rem,1.4rem+2.2vw,3.25rem)] leading-[1.12] tracking-[-0.01em] text-fg">{{ $t['documents'] }}</h2>
+        <p class="mt-6 text-lead text-fg-muted">{{ $recruitment['note'] }}</p>
+        <x-ui.link :href="$applyHref" appearance="primary" size="lg" icon="arrow-right" class="mt-10 w-full sm:w-auto">{{ $t['apply'] }}</x-ui.link>
+      </x-ui.reveal>
 
-        <h3 class="mt-12 text-eyebrow font-medium tracking-[0.18em] text-fg-muted uppercase">{{ $t['documents'] }}</h3>
-        <ol class="mt-6 border-t border-line">
+      <x-ui.reveal :delay="0.1" class="col-span-full lg:col-span-6 lg:col-start-7">
+        <ol class="border-t border-line">
           @foreach ($recruitment['documents'] as $index => $document)
             <li class="flex items-baseline gap-5 border-b border-line py-5">
               <span aria-hidden="true" class="w-6 shrink-0 text-eyebrow text-accent">{{ Web::pad($index + 1) }}</span>
@@ -112,10 +109,6 @@
             </li>
           @endforeach
         </ol>
-      </x-ui.reveal>
-
-      <x-ui.reveal :delay="0.1" class="col-span-full lg:col-span-7 xl:col-span-6 xl:col-start-7">
-        <x-site.application-form :locale="$locale" />
       </x-ui.reveal>
     </div>
   </x-ui.section>

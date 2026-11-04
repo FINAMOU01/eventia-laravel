@@ -70,7 +70,7 @@ class ApplicationController extends Controller
             report($exception);
             Storage::disk('local')->delete(array_column($stored, 'path'));
 
-            return $this->respond($request, 'application', 'candidature', false, $this->failureMessage($locale, $email));
+            return $this->respond($request, 'application', 'candidature', false, $this->failureMessage($locale, Site::CONTACT['email']));
         }
 
         try {
@@ -80,7 +80,7 @@ class ApplicationController extends Controller
             // The application is kept (notified_at empty) so it can be sent again; the visitor is told it did not go through.
             report($exception);
 
-            return $this->respond($request, 'application', 'candidature', false, $this->failureMessage($locale, $email));
+            return $this->respond($request, 'application', 'candidature', false, $this->failureMessage($locale, Site::CONTACT['email']));
         }
 
         return $this->respond($request, 'application', 'candidature', true);

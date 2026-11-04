@@ -66,7 +66,7 @@
   :success-title="$t['successTitle']"
   :success-text="$t['successText']"
   :privacy="$content['privacy']['application']"
-  :contact-email="Site::CONTACT['recruitmentEmail']"
+  :contact-email="Site::CONTACT['email']"
   :files="true"
 >
   <x-site.form-field form="candidature" name="name" :label="$l['name']" :required="true" autocomplete="name" maxlength="150" />

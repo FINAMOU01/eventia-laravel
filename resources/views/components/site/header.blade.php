@@ -11,10 +11,12 @@
     $basePath = I18n::stripLocale($pathname);
     // Pages opening on a dark hero keep the bar transparent with light text until the user scrolls.
     $darkHero = $basePath !== '/mentions-legales';
-    // Division pages highlight "Nos expertises"; other pages highlight their own entry.
-    $routeSection = str_starts_with($basePath, '/expertises/')
-        ? 'expertise'
-        : (collect($navigation)->firstWhere('href', $pathname)['id'] ?? null);
+    // Division pages highlight "Nos expertises", the application page "Recrutement"; other pages highlight their own entry.
+    $routeSection = match (true) {
+        str_starts_with($basePath, '/expertises/') => 'expertise',
+        str_starts_with($basePath, '/recrutement/') => 'recrutement',
+        default => collect($navigation)->firstWhere('href', $pathname)['id'] ?? null,
+    };
     $initialActive = $routeSection ?? 'accueil';
     $contact = Site::CONTACT;
 @endphp

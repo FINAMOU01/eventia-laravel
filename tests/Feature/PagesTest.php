@@ -17,6 +17,7 @@ class PagesTest extends TestCase
             ['/expertises/events', 'fr', 'EVENTIA EVENTS | EVENTIA SARL', 'https://eventianj.com/expertises/events'],
             ['/agence', 'fr', 'L’agence | EVENTIA SARL', 'https://eventianj.com/agence'],
             ['/recrutement', 'fr', 'Recrutement | EVENTIA SARL', 'https://eventianj.com/recrutement'],
+            ['/recrutement/candidature', 'fr', 'Candidature | EVENTIA SARL', 'https://eventianj.com/recrutement/candidature'],
             ['/contact', 'fr', 'Contact et demande de devis | EVENTIA SARL', 'https://eventianj.com/contact'],
             ['/mentions-legales', 'fr', 'Mentions légales | EVENTIA SARL', 'https://eventianj.com/mentions-legales'],
             ['/en', 'en', 'EVENTIA SARL — We create what sets you apart', 'https://eventianj.com/en'],
@@ -25,6 +26,7 @@ class PagesTest extends TestCase
             ['/en/expertises/events', 'en', 'EVENTIA EVENTS | EVENTIA SARL', 'https://eventianj.com/en/expertises/events'],
             ['/en/agence', 'en', 'The agency | EVENTIA SARL', 'https://eventianj.com/en/agence'],
             ['/en/recrutement', 'en', 'Careers | EVENTIA SARL', 'https://eventianj.com/en/recrutement'],
+            ['/en/recrutement/candidature', 'en', 'Application | EVENTIA SARL', 'https://eventianj.com/en/recrutement/candidature'],
             ['/en/contact', 'en', 'Contact and quote request | EVENTIA SARL', 'https://eventianj.com/en/contact'],
             ['/en/mentions-legales', 'en', 'Legal notice | EVENTIA SARL', 'https://eventianj.com/en/mentions-legales'],
         ];
@@ -130,7 +132,7 @@ class PagesTest extends TestCase
             ->assertSee('Nous créons ce qui vous distingue.')
             ->assertSeeInOrder(['Nos engagements', 'Écoute et accompagnement personnalisé', 'Professionnalisme et sens du service', 'Créativité et cohérence de l’image', 'Organisation et coordination', 'Attention portée aux détails'])
             ->assertSee('href="/expertises/image-personal-branding"', false)->assertSee('href="/expertises/hotesses"', false)->assertSee('href="/expertises/events"', false)
-            ->assertSee('Rejoignez-nous')->assertSee('href="/recrutement"', false)
+            ->assertSee('Rejoignez-nous')->assertSee('href="/recrutement/candidature"', false)
             ->assertSee('Rejoignez l’équipe <em class="text-accent italic">EVENTIA</em>.', false)
             ->assertDontSee('Contenu à fournir par le client');
         $this->get('/recrutement')
@@ -141,8 +143,18 @@ class PagesTest extends TestCase
             ->assertDontSee('Bon relationnel')->assertDontSee('id="criteres-titre"', false)
             ->assertSeeInOrder(['CV', 'Lettre de motivation', 'Photo portrait récente', 'Photo récente en pied, sans filtre'])
             ->assertSee('Les candidatures sont étudiées selon les besoins et les missions.')
-            ->assertSee('mailto:candidature@eventianj.com?subject=Candidature%20%E2%80%94%20EVENTIA&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20rejoindre%20l%E2%80%99%C3%A9quipe%20EVENTIA.%20Vous%20trouverez%20ci-joint%20%3A%0A-%20CV%0A-%20Lettre%20de%20motivation%0A-%20Photo%20portrait%20r%C3%A9cente%0A-%20Photo%20r%C3%A9cente%20en%20pied%2C%20sans%20filtre%0A%0ACordialement%2C%0A', false)
+            ->assertSee('Rejoignez-nous')->assertDontSee('Postuler')
+            ->assertSee('href="/recrutement/candidature"', false)
+            ->assertDontSee('candidature@eventianj.com')->assertDontSee('mailto:candidature', false)
+            ->assertDontSee('id="candidature"', false)
             ->assertDontSee('data-pending-content', false);
+        $this->get('/recrutement/candidature')
+            ->assertSee('Rejoignez l’équipe <em class="text-accent italic">EVENTIA</em>', false)
+            ->assertSee('id="candidature"', false)
+            ->assertSee('action="'.route('fr.recrutement.submit').'"', false)
+            ->assertSeeInOrder(['Nom et prénom', 'Téléphone', 'E-mail', 'Ville', 'Type de mission recherché', 'Expériences pertinentes', 'CV', 'Lettre de motivation', 'Photo portrait récente', 'Photo récente en pied, sans filtre'])
+            ->assertSee('href="/recrutement"', false)
+            ->assertDontSee('candidature@eventianj.com');
         $this->get('/contact')->assertSee('Envoyer ma demande');
     }
 
