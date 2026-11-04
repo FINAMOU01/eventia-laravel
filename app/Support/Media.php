@@ -291,8 +291,8 @@ final class Media
      * name lines, text colour, symbol height, gap under the wordmark, text size and letter spacing.
      */
     private const POLE_LOCKUPS = [
-        'image' => ['lines' => ['IMAGE & PERSONAL', 'BRANDING'], 'color' => '#0069BC', 'symbolHeight' => 2.1, 'gap' => 0.6, 'size' => 0.39, 'tracking' => 0.087],
-        'events' => ['lines' => ['EVENTS'], 'color' => '#0069BC', 'symbolHeight' => 2.1, 'gap' => 0.91, 'size' => 0.45, 'tracking' => 0.122],
+        'image' => ['lines' => ['IMAGE & PERSONAL', 'BRANDING'], 'color' => '#FFFFFF', 'symbolHeight' => 2.1, 'gap' => 0.6, 'size' => 0.39, 'tracking' => 0.087],
+        'events' => ['lines' => ['EVENTS'], 'color' => '#FFFFFF', 'symbolHeight' => 2.1, 'gap' => 0.91, 'size' => 0.45, 'tracking' => 0.122],
         'hotesses' => ['lines' => ['HÔTESSES'], 'color' => '#FFFFFF', 'symbolHeight' => 2.1, 'gap' => 0.98, 'size' => 0.435, 'tracking' => 0.138],
     ];
 

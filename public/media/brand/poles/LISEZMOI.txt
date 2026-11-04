@@ -6,10 +6,11 @@ Logos officiels des 3 pôles (fichiers fournis par le client, conservés tels qu
   logo eventia events.png             -> symbole seul Events (feuille bleue)
 
 Le site affiche chaque pôle en logo transparent, comme le logo EVENTIA SARL (sans fond) :
-  {pole}-symbole.png   -> symbole découpé dans les fichiers du client (ni redessiné ni recoloré)
-  {pole}-wordmark.png  -> mot « Eventia » découpé dans le logo complet du pôle
+  {pole}-symbole.png   -> symbole découpé dans les fichiers du client (forme non redessinée), en BLANC
+  {pole}-wordmark.png  -> mot « Eventia » découpé dans le logo complet du pôle, en BLANC
   Le nom du pôle est écrit en texte (police Poppins), avec les proportions mesurées sur chaque logo d'origine :
-    image    -> « IMAGE & PERSONAL / BRANDING », bleu royal #0069BC
-    events   -> « EVENTS », bleu royal #0069BC
+    image    -> « IMAGE & PERSONAL / BRANDING », blanc
+    events   -> « EVENTS », blanc
     hotesses -> « HÔTESSES », blanc (comme le logo officiel Hôtesses)
   Réglages (couleur, tailles, espacements) : app/Support/Media.php, constante POLE_LOCKUPS.
+Variante blanche pour Image et Events demandée le 04/11/2026 (même rendu que Hôtesses) ; les originaux bleus restent dans ce dossier.
