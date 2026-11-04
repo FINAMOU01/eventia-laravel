@@ -134,8 +134,8 @@
             <div id="{{ $descriptionId }}" @class(['grid transition-[grid-template-rows,opacity] duration-500 ease-eventia', 'grid-rows-[1fr] opacity-100' => $isActive, 'grid-rows-[0fr] opacity-0' => ! $isActive]) :class="{ 'grid-rows-[1fr] opacity-100': active === {{ $index }}, 'grid-rows-[0fr] opacity-0': active !== {{ $index }} }">
               <div class="overflow-hidden pl-[3.25rem]">
                 <div @class(['flex flex-col items-start gap-4 pb-6 transition-transform duration-700 ease-eventia', 'translate-y-0' => $isActive, '-translate-y-2' => ! $isActive]) :class="{ 'translate-y-0': active === {{ $index }}, '-translate-y-2': active !== {{ $index }} }">
-                  @if (Media::poleLogo($item['id']))
-                    <x-site.pole-logo :pole="$item" class="size-16" />
+                  @if (Media::poleLogo($item['id']) || Media::poleLockup($item['id']))
+                    <x-site.pole-logo :pole="$item" class="size-16" lockup-class="text-[22px]" />
                   @endif
                   <p class="font-display text-h3 text-white/90 italic">{{ $item['signature'] }}</p>
                   @if ($item['description'])

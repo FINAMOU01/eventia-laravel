@@ -29,10 +29,20 @@
     "height": 480,
     "folder": "/media-optimized/brand/poles/hotesses"
   },
-  "/media/brand/poles/image.png": {
-    "width": 480,
-    "height": 480,
-    "folder": "/media-optimized/brand/poles/image"
+  "/media/brand/poles/image-symbole.png": {
+    "width": 238,
+    "height": 181,
+    "folder": "/media-optimized/brand/poles/image-symbole"
+  },
+  "/media/brand/poles/image-wordmark.png": {
+    "width": 375,
+    "height": 90,
+    "folder": "/media-optimized/brand/poles/image-wordmark"
+  },
+  "/media/brand/poles/logo eventia events.png": {
+    "width": 1080,
+    "height": 1002,
+    "folder": "/media-optimized/brand/poles/logo eventia events"
   },
   "/media/equipe/equipe1.jpg": {
     "width": 2048,

@@ -47,7 +47,7 @@
         <x-ui.reveal-item class="col-span-full lg:col-span-8">
           <x-ui.eyebrow>{{ $t['eyebrow'] }} · {{ $pole['number'] }}</x-ui.eyebrow>
           <div class="mt-6">
-            <x-site.pole-logo :pole="$pole" class="size-24 lg:size-28" fallback-class="font-sans text-button font-medium tracking-[0.18em] text-fg uppercase" />
+            <x-site.pole-logo :pole="$pole" class="size-24 lg:size-28" lockup-class="text-[30px] lg:text-[38px]" fallback-class="font-sans text-button font-medium tracking-[0.18em] text-fg uppercase" />
           </div>
           <h1 id="pole-titre" class="mt-6 font-display text-[clamp(2.5rem,1.3rem+4.2vw,5.25rem)] leading-[1.05] tracking-[-0.015em] text-fg">{{ $pole['title'] }}</h1>
         </x-ui.reveal-item>

@@ -1,6 +1,7 @@
 @import "@fontsource-variable/playfair-display/wght.css";
 @import "@fontsource-variable/playfair-display/wght-italic.css";
 @import "@fontsource-variable/montserrat/wght.css";
+@import "@fontsource/poppins/latin-400.css";
 @import "tailwindcss" source(none);
 
 /* Blade views, components and the PHP data layer hold the utility classes. */
@@ -202,6 +203,8 @@
 @theme inline {
   --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
   --font-sans: var(--font-montserrat), system-ui, sans-serif;
+  /* Typeface of the division names on the official division logos. */
+  --font-brand: "Poppins", var(--font-montserrat), sans-serif;
 
   --color-primary: var(--eventia-primary);
   --color-royal: var(--eventia-royal);

@@ -3,9 +3,14 @@ Logos officiels des 3 pôles (fichiers d'origine fournis par le client, conserv�
   eventia hotesses.jpeg               -> EVENTIA HÔTESSES
   Eventia events.png                  -> EVENTIA EVENTS
 
-Versions utilisées par le site (480 x 480, générées à partir des originaux, sans recoloration ni déformation) :
-  image.png     -> logo bleu recadré (marges vides réduites) sur le fond blanc
-  hotesses.png  -> logo blanc sur son fond bleu (bandes claires des bords retirées)
-  events.png    -> logo bleu recadré (marges vides réduites) sur le fond blanc
+EVENTIA IMAGE & PERSONAL BRANDING : logo transparent, comme le logo EVENTIA SARL (sans fond blanc)
+  image-symbole.png   -> symbole découpé dans le fichier d'origine (ni redessiné ni recoloré)
+  image-wordmark.png  -> mot « Eventia » découpé dans le fichier d'origine
+  « IMAGE & PERSONAL / BRANDING » est écrit en texte (police Poppins, bleu royal #0069BC),
+  avec les proportions du logo d'origine.
 
-Pour remplacer un logo : déposer le nouveau fichier sous le même nom (image|hotesses|events, .svg, .png ou .webp).
+HÔTESSES et EVENTS : tuiles carrées 480 x 480 générées à partir des originaux
+  hotesses.png  -> logo blanc sur son fond bleu (bandes claires des bords retirées)
+  events.png    -> logo bleu recadré sur son fond blanc
+
+Pour donner le même traitement transparent à un autre pôle : ajouter {pole}-symbole.png et {pole}-wordmark.png.

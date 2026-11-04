@@ -286,6 +286,28 @@ final class Media
         return null;
     }
 
+    /** Division names split as on the official logos (line breaks of the original artwork). */
+    private const POLE_LOCKUP_LINES = [
+        'image' => ['IMAGE & PERSONAL', 'BRANDING'],
+        'hotesses' => ['HÔTESSES'],
+        'events' => ['EVENTS'],
+    ];
+
+    /**
+     * Transparent lockup like the EVENTIA SARL logo: symbol and "Eventia" wordmark cut from the official artwork,
+     * division name set in Poppins. Used when "{pole}-symbole.png" and "{pole}-wordmark.png" exist.
+     */
+    public static function poleLockup(string $pole): ?array
+    {
+        $symbol = "media/brand/poles/{$pole}-symbole.png";
+        $wordmark = "media/brand/poles/{$pole}-wordmark.png";
+        if (! is_file(public_path($symbol)) || ! is_file(public_path($wordmark))) {
+            return null;
+        }
+
+        return ['symbol' => "/{$symbol}", 'wordmark' => "/{$wordmark}", 'lines' => self::POLE_LOCKUP_LINES[$pole] ?? []];
+    }
+
     /** next.config defaults: images.imageSizes + images.deviceSizes. */
     private const ALL_SIZES = [32, 48, 64, 96, 128, 256, 384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840];
 
