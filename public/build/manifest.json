@@ -51,13 +51,21 @@
     "file": "assets/playfair-display-vietnamese-wght-normal-Cabi7G8-.woff2",
     "src": "node_modules/@fontsource-variable/playfair-display/files/playfair-display-vietnamese-wght-normal.woff2"
   },
+  "node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff": {
+    "file": "assets/poppins-latin-400-normal-BOb3E3N0.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2": {
+    "file": "assets/poppins-latin-400-normal-cpxAROuN.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-B-pvobaP.css",
+    "file": "assets/app-cgafQuQs.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-B1Qzdsn6.js",
+    "file": "assets/app-Cd2-gc25.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

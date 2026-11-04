@@ -1,37 +1,40 @@
 @props(['locale'])
 @php
-    // Photos come from Media::slots(); an expertise without a delivered photo simply keeps the deep backdrop.
-    $items = array_map(function (array $item) use ($locale) {
-        $media = Media::slot($item['slot'], $locale)['media'] ?? null;
-        $item['image'] = ($media['kind'] ?? null) === 'image' ? $media['src'] : null;
+    $home = Content::get($locale)['home'];
+    $agency = Content::get($locale)['agency'];
+    // Same interactive section as before, now presenting the three divisions (photo, name, signature, description, page).
+    $items = array_map(function (array $pole) use ($locale) {
+        $media = Media::slot($pole['slot'], $locale)['media'] ?? null;
 
-        return $item;
-    }, Content::get($locale)['expertises']);
+        return [
+            ...$pole,
+            'image' => ($media['kind'] ?? null) === 'image' ? $media['src'] : null,
+            'href' => I18n::localizeHref(Metadata::PATHS[$pole['id']], $locale),
+        ];
+    }, Content::get($locale)['poles']);
     $count = count($items);
     $total = Web::pad($count);
     $current = $items[0];
     $t = [
         'fr' => [
-            'eyebrow' => 'Nos expertises',
-            'intro' => 'EVENTIA met à votre disposition des équipes formées, préparées et professionnelles, adaptées à chaque type d’événement et d’expérience de marque.',
-            'cta' => 'Découvrir nos expertises',
-            'previous' => 'Expertise précédente',
-            'next' => 'Expertise suivante',
-            'counter' => ['Expertise ', ' sur '],
+            'cta' => 'Découvrir le pôle',
+            'previous' => 'Pôle précédent',
+            'next' => 'Pôle suivant',
+            'counter' => ['Pôle ', ' sur '],
+            'pending' => 'Descriptions officielles des trois pôles',
         ],
         'en' => [
-            'eyebrow' => 'Our expertise',
-            'intro' => 'EVENTIA provides trained, prepared and professional teams, adapted to every type of event and brand experience.',
-            'cta' => 'Discover our expertise',
-            'previous' => 'Previous expertise',
-            'next' => 'Next expertise',
-            'counter' => ['Expertise ', ' of '],
+            'cta' => 'Discover the division',
+            'previous' => 'Previous division',
+            'next' => 'Next division',
+            'counter' => ['Division ', ' of '],
+            'pending' => 'Official descriptions of the three divisions',
         ],
     ][$locale];
-    $expertisesHref = I18n::localizeHref('/expertises', $locale);
-    $slides = array_map(fn ($item) => ['id' => $item['id'], 'number' => $item['number'], 'title' => $item['title'], 'tagline' => $item['tagline']], $items);
+    $slides = array_map(fn ($item) => ['id' => $item['id'], 'number' => $item['number'], 'title' => $item['name'], 'tagline' => $item['signature'], 'description' => $item['description'], 'href' => $item['href']], $items);
+    $missingDescriptions = collect($items)->contains(fn ($item) => $item['description'] === null);
 @endphp
-{{-- Homepage preview: full-bleed photo driven by an interactive list (desktop) or a swipeable slider (mobile). --}}
+{{-- Homepage divisions: full-bleed photo driven by an interactive list (desktop) or a swipeable slider (mobile). --}}
 <section
   id="expertise"
   aria-labelledby="expertise-titre"
@@ -44,9 +47,11 @@
 >
   <x-ui.container class="grid gap-y-10 py-section lg:min-h-[min(50rem,100svh)] lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-6 lg:py-24">
     <div class="lg:col-span-5 lg:row-start-1">
-      <x-ui.eyebrow>{{ $t['eyebrow'] }}</x-ui.eyebrow>
-      <h2 id="expertise-titre" class="mt-6 font-display text-[clamp(2.25rem,1.5rem+2.4vw,3.75rem)] leading-[1.08] tracking-[-0.01em] text-white">@if ($locale === 'fr')Des solutions pensées pour chaque moment de <em class="text-accent italic">votre événement</em>.@else Solutions designed for every moment of <em class="text-accent italic">your event</em>.@endif</h2>
-      <p class="mt-6 max-w-md text-lead text-white/75">{{ $t['intro'] }}</p>
+      <x-ui.eyebrow>{{ $home['polesEyebrow'] }}</x-ui.eyebrow>
+      <h2 id="expertise-titre" class="mt-6 font-display text-[clamp(2.25rem,1.5rem+2.4vw,3.75rem)] leading-[1.08] tracking-[-0.01em] text-white">{{ $agency['title'] }}</h2>
+      @if ($missingDescriptions)
+        <x-site.pending-content :locale="$locale" :label="$t['pending']" :compact="true" class="mt-8 max-w-md" />
+      @endif
     </div>
 
     {{-- Mobile: a swipeable photo slider; desktop: the photo becomes the full-bleed backdrop of the list. --}}
@@ -78,15 +83,16 @@
         <div aria-hidden="true" class="absolute inset-0 bg-deep/15 mix-blend-multiply"></div>
 
         <div class="relative px-(--gutter) pt-28 pb-8 lg:hidden">
-          <div aria-live="polite" x-bind:aria-live="isPlaying ? 'off' : 'polite'" class="min-h-[13rem] sm:min-h-[12rem]">
+          <div aria-live="polite" x-bind:aria-live="isPlaying ? 'off' : 'polite'" class="min-h-[21rem] sm:min-h-[16.5rem]">
             <div x-ref="swap">
               <span aria-hidden="true" class="block font-display text-5xl leading-none text-accent italic" x-text="items[shown].number">{{ $current['number'] }}</span>
-              <h3 class="mt-4 font-display text-[clamp(2rem,1.4rem+3vw,2.75rem)] leading-[1.1] text-white" x-text="items[shown].title">{{ $current['title'] }}</h3>
-              <p class="mt-4 max-w-md text-body text-white/85" x-text="items[shown].tagline">{{ $current['tagline'] }}</p>
+              <h3 class="mt-4 font-display text-[clamp(1.75rem,1.2rem+2.6vw,2.5rem)] leading-[1.1] text-white" x-text="items[shown].title">{{ $current['name'] }}</h3>
+              <p class="mt-4 max-w-md font-display text-h3 text-white/85 italic" x-text="items[shown].tagline">{{ $current['signature'] }}</p>
+              <p class="mt-3 max-w-md text-body text-white/75" x-show="items[shown].description" x-text="items[shown].description">{{ $current['description'] }}</p>
             </div>
           </div>
 
-          <a href="{{ $expertisesHref }}" class="group/cta mt-8 flex items-center justify-between gap-4 border-t border-white/40 pt-4 font-sans text-button tracking-[0.12em] text-white uppercase transition-colors hover:text-accent">{{ $t['cta'] }}<x-icon name="arrow-right" class="size-5 transition-transform duration-300 group-hover/cta:translate-x-1" /></a>
+          <a href="{{ $current['href'] }}" x-bind:href="items[active].href" class="group/cta mt-8 flex items-center justify-between gap-4 border-t border-white/40 pt-4 font-sans text-button tracking-[0.12em] text-white uppercase transition-colors hover:text-accent">{{ $t['cta'] }}<x-icon name="arrow-right" class="size-5 transition-transform duration-300 group-hover/cta:translate-x-1" /></a>
         </div>
       </div>
 
@@ -108,7 +114,7 @@
         @foreach ($items as $index => $item)
           @php
               $isActive = $index === 0;
-              $descriptionId = "expertise-{$item['id']}-texte";
+              $descriptionId = "pole-{$item['id']}-texte";
           @endphp
           <li class="relative border-t border-white/15 last:border-b">
             <span aria-hidden="true" @class(['absolute -top-px left-0 h-px bg-accent transition-[width] duration-700 ease-eventia', 'w-full' => $isActive, 'w-0' => ! $isActive]) :class="{ 'w-full': active === {{ $index }}, 'w-0': active !== {{ $index }} }"></span>
@@ -120,15 +126,24 @@
               x-on:click="active = {{ $index }}"
               x-on:focus="active = {{ $index }}"
               x-on:pointerenter="$event.pointerType === 'mouse' && (active = {{ $index }})"
-              class="group/item flex w-full cursor-pointer items-baseline gap-5 py-4 text-left lg:py-[1.05rem]"
+              class="group/item flex w-full cursor-pointer items-baseline gap-5 py-5 text-left"
             >
               <span @class(['w-8 shrink-0 font-display text-base italic transition-colors duration-500', 'text-accent' => $isActive, 'text-white/35 group-hover/item:text-white/60' => ! $isActive]) :class="{ 'text-accent': active === {{ $index }}, 'text-white/35 group-hover/item:text-white/60': active !== {{ $index }} }">{{ $item['number'] }}</span>
-              <span @class(['font-display text-[clamp(1.25rem,1.05rem+0.6vw,1.75rem)] leading-snug transition-[color,translate] duration-500 ease-eventia', 'translate-x-1.5 text-white' => $isActive, 'text-white/55 group-hover/item:text-white/85' => ! $isActive]) :class="{ 'translate-x-1.5 text-white': active === {{ $index }}, 'text-white/55 group-hover/item:text-white/85': active !== {{ $index }} }">{{ $item['title'] }}</span>
+              <span @class(['font-display text-[clamp(1.25rem,1.05rem+0.6vw,1.75rem)] leading-snug transition-[color,translate] duration-500 ease-eventia', 'translate-x-1.5 text-white' => $isActive, 'text-white/55 group-hover/item:text-white/85' => ! $isActive]) :class="{ 'translate-x-1.5 text-white': active === {{ $index }}, 'text-white/55 group-hover/item:text-white/85': active !== {{ $index }} }">{{ $item['name'] }}</span>
             </button>
             <div id="{{ $descriptionId }}" @class(['grid transition-[grid-template-rows,opacity] duration-500 ease-eventia', 'grid-rows-[1fr] opacity-100' => $isActive, 'grid-rows-[0fr] opacity-0' => ! $isActive]) :class="{ 'grid-rows-[1fr] opacity-100': active === {{ $index }}, 'grid-rows-[0fr] opacity-0': active !== {{ $index }} }">
-              <p class="overflow-hidden pl-[3.25rem]">
-                <span @class(['block pb-5 text-body text-white/80 transition-transform duration-700 ease-eventia', 'translate-y-0' => $isActive, '-translate-y-2' => ! $isActive]) :class="{ 'translate-y-0': active === {{ $index }}, '-translate-y-2': active !== {{ $index }} }">{{ $item['tagline'] }}</span>
-              </p>
+              <div class="overflow-hidden pl-[3.25rem]">
+                <div @class(['flex flex-col items-start gap-4 pb-6 transition-transform duration-700 ease-eventia', 'translate-y-0' => $isActive, '-translate-y-2' => ! $isActive]) :class="{ 'translate-y-0': active === {{ $index }}, '-translate-y-2': active !== {{ $index }} }">
+                  @if (Media::poleLogo($item['id']) || Media::poleLockup($item['id']))
+                    <x-site.pole-logo :pole="$item" class="size-16" lockup-class="text-[22px]" />
+                  @endif
+                  <p class="font-display text-h3 text-white/90 italic">{{ $item['signature'] }}</p>
+                  @if ($item['description'])
+                    <p class="text-body text-white/80">{{ $item['description'] }}</p>
+                  @endif
+                  <a href="{{ $item['href'] }}" class="group/cta inline-flex items-center gap-3 font-sans text-button tracking-[0.12em] text-white uppercase transition-colors hover:text-accent">{{ $t['cta'] }}<x-icon name="arrow-right" class="size-4 transition-transform duration-300 group-hover/cta:translate-x-1" /></a>
+                </div>
+              </div>
             </div>
           </li>
         @endforeach
@@ -145,7 +160,7 @@
         <span class="text-h3 text-white/40">/ {{ $total }}</span>
       </p>
 
-      <x-ui.link :href="$expertisesHref" appearance="primary" size="lg" icon="arrow-right" class="w-full sm:w-auto sm:self-start">{{ $t['cta'] }}</x-ui.link>
+      <x-ui.link :href="$current['href']" x-bind:href="items[active].href" appearance="primary" size="lg" icon="arrow-right" class="w-full sm:w-auto sm:self-start">{{ $t['cta'] }}</x-ui.link>
     </div>
   </x-ui.container>
 </section>

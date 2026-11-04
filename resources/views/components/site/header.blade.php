@@ -2,16 +2,21 @@
 @php
     $text = Site::text($locale);
     $t = [
-        'fr' => ['open' => 'Ouvrir le menu', 'close' => 'Fermer le menu', 'mainNav' => 'Navigation principale', 'menuNav' => 'Menu principal'],
-        'en' => ['open' => 'Open the menu', 'close' => 'Close the menu', 'mainNav' => 'Main navigation', 'menuNav' => 'Main menu'],
+        'fr' => ['open' => 'Ouvrir le menu', 'close' => 'Fermer le menu', 'mainNav' => 'Navigation principale', 'menuNav' => 'Menu principal', 'submenu' => 'Afficher les expertises'],
+        'en' => ['open' => 'Open the menu', 'close' => 'Close the menu', 'mainNav' => 'Main navigation', 'menuNav' => 'Main menu', 'submenu' => 'Show the areas of expertise'],
     ][$locale];
     $navigation = Site::navigation($locale);
     $homeHref = I18n::localizeHref('/#accueil', $locale);
     $ctaHref = I18n::localizeHref(Site::PRIMARY_CTA_HREF, $locale);
     $basePath = I18n::stripLocale($pathname);
     // Pages opening on a dark hero keep the bar transparent with light text until the user scrolls.
-    $darkHero = in_array($basePath, ['/', '/expertises', '/realisations', '/equipe', '/recrutement', '/contact'], true);
-    $routeSection = collect($navigation)->firstWhere('href', $pathname)['id'] ?? null;
+    $darkHero = $basePath !== '/mentions-legales';
+    // Division pages highlight "Nos expertises", the application page "Recrutement"; other pages highlight their own entry.
+    $routeSection = match (true) {
+        str_starts_with($basePath, '/expertises/') => 'expertise',
+        str_starts_with($basePath, '/recrutement/') => 'recrutement',
+        default => collect($navigation)->firstWhere('href', $pathname)['id'] ?? null,
+    };
     $initialActive = $routeSection ?? 'accueil';
     $contact = Site::CONTACT;
 @endphp
@@ -30,20 +35,80 @@
     <nav aria-label="{{ $t['mainNav'] }}" class="ml-auto hidden xl:block">
       <ul class="flex items-center gap-8">
         @foreach ($navigation as $item)
-          @php $isActive = $initialActive === $item['id']; @endphp
-          <li>
-            <a
-              href="{{ $item['href'] }}"
-              @if ($isActive) aria-current="true" @endif
-              :aria-current="active === @js($item['id']) ? 'true' : null"
-              @class([
-                  'relative block py-2 text-button uppercase transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:bg-accent after:transition-transform after:duration-300',
-                  'text-fg after:scale-x-100' => $isActive,
-                  'text-fg-muted after:scale-x-0 hover:text-fg hover:after:scale-x-100' => ! $isActive,
-              ])
-              :class="{ 'text-fg after:scale-x-100': active === @js($item['id']), 'text-fg-muted after:scale-x-0 hover:text-fg hover:after:scale-x-100': active !== @js($item['id']) }"
-            >{{ $item['label'] }}</a>
-          </li>
+          @php
+              $isActive = $initialActive === $item['id'];
+              $linkClasses = 'relative block py-2 text-button uppercase transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:bg-accent after:transition-transform after:duration-300';
+          @endphp
+          @if ($item['children'])
+            <li
+              class="relative flex items-center gap-1"
+              x-data="{ open: false }"
+              x-on:mouseenter="open = true"
+              x-on:mouseleave="open = false"
+              x-on:keydown.escape.stop="open = false; $refs.trigger.focus()"
+              x-on:focusout="if (!$el.contains($event.relatedTarget)) open = false"
+            >
+              <a
+                href="{{ $item['href'] }}"
+                @if ($isActive) aria-current="true" @endif
+                :aria-current="active === @js($item['id']) ? 'true' : null"
+                @class([$linkClasses, 'text-fg after:scale-x-100' => $isActive, 'text-fg-muted after:scale-x-0 hover:text-fg hover:after:scale-x-100' => ! $isActive])
+                :class="{ 'text-fg after:scale-x-100': active === @js($item['id']), 'text-fg-muted after:scale-x-0 hover:text-fg hover:after:scale-x-100': active !== @js($item['id']) }"
+              >{{ $item['label'] }}</a>
+              <button
+                type="button"
+                x-ref="trigger"
+                aria-label="{{ $t['submenu'] }}"
+                aria-haspopup="true"
+                aria-expanded="false"
+                :aria-expanded="open ? 'true' : 'false'"
+                aria-controls="sous-menu-expertises"
+                x-on:click="open = !open"
+                class="-mr-1 inline-flex size-6 items-center justify-center text-fg-muted transition-colors hover:text-fg"
+              ><x-icon name="chevron-down" class="size-3.5 transition-transform duration-300" x-bind:class="open && 'rotate-180'" /></button>
+
+              {{-- Same deep tone and hairlines as the mobile menu. --}}
+              <div
+                id="sous-menu-expertises"
+                x-show="open"
+                x-cloak
+                x-transition:enter="transition duration-300 ease-eventia"
+                x-transition:enter-start="opacity-0 -translate-y-1"
+                x-transition:leave="transition duration-200 ease-eventia"
+                x-transition:leave-end="opacity-0 -translate-y-1"
+                class="tone-deep absolute top-full left-1/2 w-[25rem] -translate-x-1/2 pt-3"
+              >
+                <ul class="rounded-card border border-line bg-canvas p-2 text-fg shadow-lift">
+                  @foreach ($item['children'] as $child)
+                    @php $childActive = $basePath === Metadata::PATHS[$child['id']]; @endphp
+                    <li>
+                      <a
+                        href="{{ $child['href'] }}"
+                        @if ($childActive) aria-current="page" @endif
+                        @class(['group/sub flex items-baseline gap-4 rounded-media px-4 py-3 transition-colors hover:bg-white/5', 'bg-white/5' => $childActive])
+                      >
+                        <span aria-hidden="true" class="font-display text-base text-accent italic">{{ $child['number'] }}</span>
+                        <span class="flex flex-col gap-1">
+                          <span class="text-button tracking-[0.12em] text-fg uppercase transition-colors group-hover/sub:text-accent">{{ $child['label'] }}</span>
+                          <span class="font-display text-small text-fg-muted italic">{{ $child['signature'] }}</span>
+                        </span>
+                      </a>
+                    </li>
+                  @endforeach
+                </ul>
+              </div>
+            </li>
+          @else
+            <li>
+              <a
+                href="{{ $item['href'] }}"
+                @if ($isActive) aria-current="true" @endif
+                :aria-current="active === @js($item['id']) ? 'true' : null"
+                @class([$linkClasses, 'text-fg after:scale-x-100' => $isActive, 'text-fg-muted after:scale-x-0 hover:text-fg hover:after:scale-x-100' => ! $isActive])
+                :class="{ 'text-fg after:scale-x-100': active === @js($item['id']), 'text-fg-muted after:scale-x-0 hover:text-fg hover:after:scale-x-100': active !== @js($item['id']) }"
+              >{{ $item['label'] }}</a>
+            </li>
+          @endif
         @endforeach
       </ul>
     </nav>
@@ -95,6 +160,21 @@
                 ])
                 :class="{ 'text-accent': active === @js($item['id']), 'text-fg hover:text-accent': active !== @js($item['id']) }"
               ><span aria-hidden="true" class="w-6 font-sans text-eyebrow text-fg-muted">{{ Web::pad($index + 1) }}</span>{{ $item['label'] }}</a>
+              @if ($item['children'])
+                {{-- The three divisions, indented under "Nos expertises". --}}
+                <ul class="-mt-1 flex flex-col pb-4 pl-11">
+                  @foreach ($item['children'] as $child)
+                    @php $childActive = $basePath === Metadata::PATHS[$child['id']]; @endphp
+                    <li>
+                      <a
+                        href="{{ $child['href'] }}"
+                        @if ($childActive) aria-current="page" @endif
+                        @class(['flex items-baseline gap-3 py-2 text-button tracking-[0.12em] uppercase transition-colors', 'text-accent' => $childActive, 'text-fg-muted hover:text-accent' => ! $childActive])
+                      ><span aria-hidden="true" class="font-display text-small tracking-normal text-accent normal-case italic">{{ $child['number'] }}</span>{{ $child['label'] }}</a>
+                    </li>
+                  @endforeach
+                </ul>
+              @endif
             </li>
           @endforeach
         </ol>

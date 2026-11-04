@@ -1,14 +1,15 @@
 @props(['locale'])
 @php
     $t = [
-        'fr' => ['email' => 'E-mail', 'phone' => 'Téléphone', 'location' => 'Localisation'],
-        'en' => ['email' => 'E-mail', 'phone' => 'Phone', 'location' => 'Location'],
+        'fr' => ['email' => 'E-mail', 'phone' => 'Téléphone', 'location' => 'Adresse', 'socials' => 'Réseaux sociaux'],
+        'en' => ['email' => 'E-mail', 'phone' => 'Phone', 'location' => 'Address', 'socials' => 'Social media'],
     ][$locale];
     $contact = Site::CONTACT;
     $channels = [
-        ['icon' => 'mail', 'label' => $t['email'], 'value' => $contact['email'], 'href' => 'mailto:'.$contact['email']],
-        ['icon' => 'phone', 'label' => $t['phone'], 'value' => $contact['phoneDisplay'], 'href' => $contact['phoneHref']],
         ['icon' => 'map-pin', 'label' => $t['location'], 'value' => $contact['address'], 'href' => null],
+        ['icon' => 'phone', 'label' => $t['phone'], 'value' => $contact['phoneDisplay'], 'href' => $contact['phoneHref']],
+        ['icon' => 'phone', 'label' => $t['phone'], 'value' => $contact['phone2Display'], 'href' => $contact['phone2Href']],
+        ['icon' => 'mail', 'label' => $t['email'], 'value' => $contact['email'], 'href' => 'mailto:'.$contact['email']],
     ];
 @endphp
 <ul class="flex flex-col border-t border-line">
@@ -19,3 +20,17 @@
     </li>
   @endforeach
 </ul>
+<div class="mt-8">
+  <p class="text-eyebrow font-medium tracking-[0.14em] text-fg-muted uppercase">{{ $t['socials'] }}</p>
+  <ul class="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-body">
+    @foreach (Site::SOCIALS as $social)
+      <li>
+        @if ($social['url'])
+          <x-ui.link :href="$social['url']" target="_blank">{{ $social['label'][$locale] }}</x-ui.link>
+        @else
+          <span class="text-fg">{{ $social['label'][$locale] }}</span>
+        @endif
+      </li>
+    @endforeach
+  </ul>
+</div>

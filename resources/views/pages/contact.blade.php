@@ -2,16 +2,8 @@
 
 @php
     $t = [
-        'fr' => [
-            'lead' => 'Décrivez-nous votre projet et notre équipe pourra mieux comprendre votre besoin.',
-            'region' => 'Coordonnées et demande de devis',
-            'details' => 'Coordonnées',
-        ],
-        'en' => [
-            'lead' => 'Tell us about your project so our team can better understand your needs.',
-            'region' => 'Contact details and quote request',
-            'details' => 'Contact details',
-        ],
+        'fr' => ['region' => 'Coordonnées et demande de devis', 'details' => 'Coordonnées'],
+        'en' => ['region' => 'Contact details and quote request', 'details' => 'Contact details'],
     ][$locale];
 @endphp
 
@@ -27,9 +19,6 @@
           <x-ui.eyebrow>Contact</x-ui.eyebrow>
           <h1 id="contact-page-titre" class="mt-6 font-display text-[clamp(2.5rem,1.3rem+4.2vw,5.25rem)] leading-[1.05] tracking-[-0.015em] text-fg"><x-site.contact-title :locale="$locale" /></h1>
         </x-ui.reveal-item>
-        <x-ui.reveal-item class="col-span-full lg:col-span-4 lg:pb-3">
-          <p class="max-w-md border-l border-accent/60 pl-5 text-lead text-fg-muted">{{ $t['lead'] }}</p>
-        </x-ui.reveal-item>
       </x-ui.reveal-group>
     </x-ui.container>
   </section>
@@ -39,7 +28,7 @@
       <x-site.contact-block :locale="$locale">
         <x-slot:aside>
           <x-ui.eyebrow>{{ $t['details'] }}</x-ui.eyebrow>
-          <p class="mt-6 font-display text-h3 text-fg">@if ($locale === 'fr')Contactez directement l’équipe <em class="text-accent italic">EVENTIA</em>.@else Contact the <em class="text-accent italic">EVENTIA</em> team directly.@endif</p>
+          <p class="mt-6 font-display text-h3 text-fg">{{ Site::NAME }}</p>
           <div class="mt-8">
             <x-site.contact-details :locale="$locale" />
           </div>

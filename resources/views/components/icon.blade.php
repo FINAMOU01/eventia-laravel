@@ -6,6 +6,8 @@
         'x' => ['lucide-x', '<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>'],
         'arrow-right' => ['lucide-arrow-right', '<path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>'],
         'arrow-left' => ['lucide-arrow-left', '<path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path>'],
+        'chevron-down' => ['lucide-chevron-down', '<path d="m6 9 6 6 6-6"></path>'],
+        'upload' => ['lucide-upload', '<path d="M12 3v12"></path><path d="m17 8-5-5-5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>'],
         'pause' => ['lucide-pause', '<rect x="14" y="3" width="5" height="18" rx="1"></rect><rect x="5" y="3" width="5" height="18" rx="1"></rect>'],
         'play' => ['lucide-play', '<path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>'],
         'alert-circle' => ['lucide-circle-alert lucide-alert-circle', '<circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line>'],
