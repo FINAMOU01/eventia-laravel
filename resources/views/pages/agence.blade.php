@@ -156,5 +156,11 @@
     </x-ui.reveal>
   </x-ui.section>
 
-  <x-site.page-cta :locale="$locale" id="agence-cta-titre" eyebrow="Contact" :label="$locale === 'fr' ? 'Rejoignez-nous' : 'Join us'" :href="I18n::localizeHref(Metadata::PATHS['recrutement'], $locale)" />
+  @php
+      $recruitment = $content['recruitment'];
+      [$joinBefore, $joinAfter] = explode($recruitment['titleAccent'], $recruitment['title'], 2);
+  @endphp
+  <x-site.page-cta :locale="$locale" id="agence-cta-titre" :eyebrow="$locale === 'fr' ? 'Recrutement' : 'Careers'" :label="$locale === 'fr' ? 'Rejoignez-nous' : 'Join us'" :href="I18n::localizeHref(Metadata::PATHS['recrutement'], $locale)">
+    <x-slot:title>{{ $joinBefore }}<em class="text-accent italic">{{ $recruitment['titleAccent'] }}</em>{{ $joinAfter }}.</x-slot:title>
+  </x-site.page-cta>
 @endsection

@@ -131,6 +131,7 @@ class PagesTest extends TestCase
             ->assertSeeInOrder(['Nos engagements', 'Écoute et accompagnement personnalisé', 'Professionnalisme et sens du service', 'Créativité et cohérence de l’image', 'Organisation et coordination', 'Attention portée aux détails'])
             ->assertSee('href="/expertises/image-personal-branding"', false)->assertSee('href="/expertises/hotesses"', false)->assertSee('href="/expertises/events"', false)
             ->assertSee('Rejoignez-nous')->assertSee('href="/recrutement"', false)
+            ->assertSee('Rejoignez l’équipe <em class="text-accent italic">EVENTIA</em>.', false)
             ->assertDontSee('Contenu à fournir par le client');
         $this->get('/recrutement')
             ->assertSee('Rejoignez l’équipe <em class="text-accent italic">EVENTIA</em>', false)
