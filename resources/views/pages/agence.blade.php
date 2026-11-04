@@ -156,5 +156,5 @@
     </x-ui.reveal>
   </x-ui.section>
 
-  <x-site.page-cta :locale="$locale" id="agence-cta-titre" eyebrow="Contact" />
+  <x-site.page-cta :locale="$locale" id="agence-cta-titre" eyebrow="Contact" :label="$locale === 'fr' ? 'Rejoignez-nous' : 'Join us'" :href="I18n::localizeHref(Metadata::PATHS['recrutement'], $locale)" />
 @endsection
