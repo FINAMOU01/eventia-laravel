@@ -19,15 +19,25 @@
     "height": 1002,
     "folder": "/media-optimized/brand/poles/eventia image&personal brading"
   },
-  "/media/brand/poles/events.png": {
-    "width": 480,
-    "height": 480,
-    "folder": "/media-optimized/brand/poles/events"
+  "/media/brand/poles/events-symbole.png": {
+    "width": 243,
+    "height": 225,
+    "folder": "/media-optimized/brand/poles/events-symbole"
   },
-  "/media/brand/poles/hotesses.png": {
-    "width": 480,
-    "height": 480,
-    "folder": "/media-optimized/brand/poles/hotesses"
+  "/media/brand/poles/events-wordmark.png": {
+    "width": 396,
+    "height": 95,
+    "folder": "/media-optimized/brand/poles/events-wordmark"
+  },
+  "/media/brand/poles/hotesses-symbole.png": {
+    "width": 224,
+    "height": 199,
+    "folder": "/media-optimized/brand/poles/hotesses-symbole"
+  },
+  "/media/brand/poles/hotesses-wordmark.png": {
+    "width": 598,
+    "height": 143,
+    "folder": "/media-optimized/brand/poles/hotesses-wordmark"
   },
   "/media/brand/poles/image-symbole.png": {
     "width": 238,
@@ -43,6 +53,11 @@
     "width": 1080,
     "height": 1002,
     "folder": "/media-optimized/brand/poles/logo eventia events"
+  },
+  "/media/brand/poles/logo eventia hotesses.png": {
+    "width": 1080,
+    "height": 1002,
+    "folder": "/media-optimized/brand/poles/logo eventia hotesses"
   },
   "/media/equipe/equipe1.jpg": {
     "width": 2048,

@@ -286,11 +286,14 @@ final class Media
         return null;
     }
 
-    /** Division names split as on the official logos (line breaks of the original artwork). */
-    private const POLE_LOCKUP_LINES = [
-        'image' => ['IMAGE & PERSONAL', 'BRANDING'],
-        'hotesses' => ['HÔTESSES'],
-        'events' => ['EVENTS'],
+    /**
+     * Lockup settings taken from each official logo (in em of the "Eventia" wordmark height):
+     * name lines, text colour, symbol height, gap under the wordmark, text size and letter spacing.
+     */
+    private const POLE_LOCKUPS = [
+        'image' => ['lines' => ['IMAGE & PERSONAL', 'BRANDING'], 'color' => '#0069BC', 'symbolHeight' => 2.1, 'gap' => 0.6, 'size' => 0.39, 'tracking' => 0.087],
+        'events' => ['lines' => ['EVENTS'], 'color' => '#0069BC', 'symbolHeight' => 2.1, 'gap' => 0.91, 'size' => 0.45, 'tracking' => 0.122],
+        'hotesses' => ['lines' => ['HÔTESSES'], 'color' => '#FFFFFF', 'symbolHeight' => 2.1, 'gap' => 0.98, 'size' => 0.435, 'tracking' => 0.138],
     ];
 
     /**
@@ -301,11 +304,11 @@ final class Media
     {
         $symbol = "media/brand/poles/{$pole}-symbole.png";
         $wordmark = "media/brand/poles/{$pole}-wordmark.png";
-        if (! is_file(public_path($symbol)) || ! is_file(public_path($wordmark))) {
+        if (! is_file(public_path($symbol)) || ! is_file(public_path($wordmark)) || ! isset(self::POLE_LOCKUPS[$pole])) {
             return null;
         }
 
-        return ['symbol' => "/{$symbol}", 'wordmark' => "/{$wordmark}", 'lines' => self::POLE_LOCKUP_LINES[$pole] ?? []];
+        return ['symbol' => "/{$symbol}", 'wordmark' => "/{$wordmark}"] + self::POLE_LOCKUPS[$pole];
     }
 
     /** next.config defaults: images.imageSizes + images.deviceSizes. */

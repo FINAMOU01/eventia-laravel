@@ -1,16 +1,15 @@
-Logos officiels des 3 pôles (fichiers d'origine fournis par le client, conservés tels quels) :
-  eventia image&personal brading.png  -> EVENTIA IMAGE & PERSONAL BRANDING
-  eventia hotesses.jpeg               -> EVENTIA HÔTESSES
-  Eventia events.png                  -> EVENTIA EVENTS
+Logos officiels des 3 pôles (fichiers fournis par le client, conservés tels quels) :
+  eventia image&personal brading.png  -> logo complet EVENTIA IMAGE & PERSONAL BRANDING
+  eventia hotesses.jpeg               -> logo complet EVENTIA HÔTESSES
+  Eventia events.png                  -> logo complet EVENTIA EVENTS
+  logo eventia hotesses.png           -> symbole seul Hôtesses (étoile blanche)
+  logo eventia events.png             -> symbole seul Events (feuille bleue)
 
-EVENTIA IMAGE & PERSONAL BRANDING : logo transparent, comme le logo EVENTIA SARL (sans fond blanc)
-  image-symbole.png   -> symbole découpé dans le fichier d'origine (ni redessiné ni recoloré)
-  image-wordmark.png  -> mot « Eventia » découpé dans le fichier d'origine
-  « IMAGE & PERSONAL / BRANDING » est écrit en texte (police Poppins, bleu royal #0069BC),
-  avec les proportions du logo d'origine.
-
-HÔTESSES et EVENTS : tuiles carrées 480 x 480 générées à partir des originaux
-  hotesses.png  -> logo blanc sur son fond bleu (bandes claires des bords retirées)
-  events.png    -> logo bleu recadré sur son fond blanc
-
-Pour donner le même traitement transparent à un autre pôle : ajouter {pole}-symbole.png et {pole}-wordmark.png.
+Le site affiche chaque pôle en logo transparent, comme le logo EVENTIA SARL (sans fond) :
+  {pole}-symbole.png   -> symbole découpé dans les fichiers du client (ni redessiné ni recoloré)
+  {pole}-wordmark.png  -> mot « Eventia » découpé dans le logo complet du pôle
+  Le nom du pôle est écrit en texte (police Poppins), avec les proportions mesurées sur chaque logo d'origine :
+    image    -> « IMAGE & PERSONAL / BRANDING », bleu royal #0069BC
+    events   -> « EVENTS », bleu royal #0069BC
+    hotesses -> « HÔTESSES », blanc (comme le logo officiel Hôtesses)
+  Réglages (couleur, tailles, espacements) : app/Support/Media.php, constante POLE_LOCKUPS.
