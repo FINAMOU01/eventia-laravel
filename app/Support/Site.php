@@ -23,11 +23,10 @@ final class Site
 
     public const WHATSAPP_NUMBER = '237692237387';
 
-    /** Social networks named by the client. `url` stays null until the client provides it; the name is shown without a link. */
+    /** Official social networks (LinkedIn removed at the client's request until the page exists). */
     public const SOCIALS = [
-        ['id' => 'facebook', 'label' => ['fr' => 'Facebook', 'en' => 'Facebook'], 'url' => null],
-        ['id' => 'instagram', 'label' => ['fr' => 'Instagram', 'en' => 'Instagram'], 'url' => null],
-        ['id' => 'linkedin', 'label' => ['fr' => 'LinkedIn : EVENTIA SARL', 'en' => 'LinkedIn: EVENTIA SARL'], 'url' => null],
+        ['id' => 'facebook', 'label' => ['fr' => 'Facebook', 'en' => 'Facebook'], 'url' => 'https://www.facebook.com/profile.php?id=61591566302411'],
+        ['id' => 'instagram', 'label' => ['fr' => 'Instagram', 'en' => 'Instagram'], 'url' => 'https://www.instagram.com/eventia_ag/'],
     ];
 
     private const TEXT = [

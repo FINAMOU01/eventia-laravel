@@ -78,6 +78,9 @@ class PagesTest extends TestCase
             ->assertSee('tel:+237675423265', false)
             ->assertSee('mailto:contact@eventianj.com', false)
             ->assertSee('https://wa.me/237692237387', false)
+            ->assertSee('href="https://www.facebook.com/profile.php?id=61591566302411"', false)
+            ->assertSee('href="https://www.instagram.com/eventia_ag/"', false)
+            ->assertDontSee('LinkedIn')
             ->assertDontSee('656', false)
             ->assertDontSee('BY N.J');
     }
